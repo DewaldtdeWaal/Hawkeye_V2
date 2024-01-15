@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import {HeaderComponent} from 'src/app/header/header.component'
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './Pages/dynamic-site-page/Sub Components/container/container.component';
 import { BooleanScanComponent } from './Pages/dynamic-site-page/Sub Components/boolean-scan/boolean-scan.component';
@@ -30,7 +30,7 @@ import { NewDropDownComponent } from './Controls/new-drop-down/new-drop-down.com
 import { ReservoirComponent } from './Pages/dynamic-site-page/Sub Components/reservoir/reservoir.component';
 import { TemplateFormComponent } from './Examples/template-form/template-form.component';
 import { ReactiveFormComponent } from './Examples/reactive-form/reactive-form.component';
-import { LoginComponent } from './Pages/login/Old_Login/login.component';
+//import { LoginComponent } from './Pages/login/Old_Login/login.component';
 import { SignupComponent } from './Pages/signup/signup.component';
 import { AppMainComponent } from './app-main/app-main.component';
 import { LoginPageComponent } from './Pages/login/login-page/login-page.component';
@@ -54,6 +54,13 @@ import { MarshalComponent } from './Pages/dynamic-site-page/Sub Components/marsh
 import { MarshalCreationComponent } from './Creation Components/marshal-creation/marshal-creation.component';
 import { StringlistComponent } from './Pages/dynamic-site-page/Sub Components/stringlist/stringlist.component';
 import { StringlistCreationComponent } from './Creation Components/stringlist-creation/stringlist-creation.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -83,7 +90,7 @@ import { StringlistCreationComponent } from './Creation Components/stringlist-cr
     ReservoirComponent,
     TemplateFormComponent,
     ReactiveFormComponent,
-    LoginComponent,
+   // LoginComponent,
     SignupComponent,
     AppMainComponent,
     LoginPageComponent,
@@ -99,7 +106,8 @@ import { StringlistCreationComponent } from './Creation Components/stringlist-cr
     MarshalComponent,
     MarshalCreationComponent,
     StringlistComponent,
-    StringlistCreationComponent
+    StringlistCreationComponent,
+    HeaderComponent,
     
 
   ],
@@ -109,7 +117,14 @@ import { StringlistCreationComponent } from './Creation Components/stringlist-cr
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule
   ],
   providers: [UserAuthenticationService, HeirarchyEditor,CommunicationService, RouteGuard, SiteStorageService,{provide: HTTP_INTERCEPTORS,useClass: HeaderInterceptor, multi:true},provideEcharts()],
   bootstrap: [AppComponent]

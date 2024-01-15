@@ -92,7 +92,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
       sites.push(item.sitename)
     }
 
-    this.http.post<any>( "http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"trend",sites,start:this.starttime,end:this.endtime}).subscribe((res) =>
+    this.http.post<any>(this.commservice.postHostName,{requesttype:"trend",sites,start:this.starttime,end:this.endtime}).subscribe((res) =>
       {
         for(var item of this.structure.trendinformation)
         {

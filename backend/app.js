@@ -4,8 +4,9 @@ const path = require('path')
 var mongoVar = require("./variables");
 var MongoClient = require('mongodb').MongoClient;
 var database = null;
-var myMongoClient = null;
-var standardConnectionString = "mongodb://admin:M%40CAutomation1@127.0.0.1:27017/"
+var myMongoClient = null; 
+var standardConnectionString ="mongodb://localhost:27017"
+//var standardConnectionString = "mongodb://admin:M%40CAutomation1@127.0.0.1:27017/"
 myMongoClient = new MongoClient(standardConnectionString, { useNewUrlParser: true, socketTimeoutMS: 1000 })
 var theTagData = {};
 var bcrypt = require("bcrypt")
@@ -16,9 +17,10 @@ const signer = "This is the token signer string that i have decided to use and i
 var queryData = {}
 var lockRead = false
 
-
+ 
 usercollection = "HawkEyeUsers"
 pagecollection = "HawkEyePages"
+
 
 
 class QueryData
@@ -34,8 +36,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
+
 var confirmUser = (req, res, next) => 
 {
+
+    console.log("Here")
     try
     {
         const token = req.headers.authorization.split(" ")[1]
@@ -58,9 +64,12 @@ app.use((req,res,next) => {
     next();
 });
 
+
+
 app.post('/api/login' ,Login)
 async function Login(req, res, next)
-{
+{  
+    console.log("Find me")
     
     var output = "";
     var post = req.body
@@ -279,8 +288,6 @@ async function PostRouting(req, res, next)
                     {
                         var userEntry = GetUserEntry(post.user)
 
-                        //var pages = GetUserPages(userEntry)
-
                         if(userEntry)
                         {
                             var index = -1
@@ -316,7 +323,6 @@ async function PostRouting(req, res, next)
                                         queryData.UserPages[i] = post.page
                                     }    
                                 }
-
 
                                 if(removeid > -1 && oldcustomer != null)
                                 {

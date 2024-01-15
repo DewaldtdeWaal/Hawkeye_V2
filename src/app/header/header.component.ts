@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { UserAuthenticationService } from '../user-authentication.service';
@@ -7,12 +7,13 @@ import { SiteStorageService } from '../site-storage.service';
 import { CommunicationService } from '../communication.service';
 import { HeirarchyEditor } from '../heirarchy-editor.service';
 
+import {header} from "src/app/Service-Files/headerToggle"
 @Component({
-  selector: 'app-app-main',
-  templateUrl: './app-main.component.html',
-  styleUrls: ['./app-main.component.css']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
-export class AppMainComponent implements OnDestroy, AfterContentInit {
+export class HeaderComponent {
   userdata:any = {}
   disablenavigation:any = false
   copyofuserdata:any = null
@@ -25,10 +26,9 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
   timer:any =  null;
   private tokenlistener: Subscription = null;
   pageheirarchy:any = {}
-
-  
-
-  constructor(private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor)
+  opened=false;
+  @Output() messageEvent = new EventEmitter<string>()
+  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor)
   {
   }
 
@@ -85,10 +85,6 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
     this.UpdateLinks()
   } 
 
-
-  recieveMessage($event){
-    var message = $event
-  }
   PageChanged()
   {
     this.disablenavigation = true;
@@ -128,40 +124,18 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
       }
       if(this.userdata.superuser)
       {
-        
         this.links.push({pagename:"SVG Drawing", navpage:"svgdrawing"})
       }
       this.links.push({pagename:"Settings", navpage:"usersettings"})
   }
 
-  event:any;
-  changepage($event:any)
+  changepages($event:any)
   {
-    console.log($event)
 
     var event = $event
-    for(var i = 0;i < this.userdata.pages.length; i++)
-    {
-      if(this.userdata.pages[i].pageName == event.pagename)
-      {
-        this.sitestructure = this.userdata.pages[i]
-        if(this.variableData != null && this.sitestructure != null)
-          this.SetSiteStructureVariables(this.sitestructure,this.variableData)
-        break;
-      }
-    }
 
-    if(event.navpage == "development")
-    {
-      var str = JSON.stringify( this.userdata)
-
-      this.copyofuserdata = JSON.parse(str)
-    }
-
-    this.fontsize = 15;
-
-    this.title = event.pagename
-    this.currentpage = event.navpage
+    console.log(event)
+    this.messageEvent.emit(event)
   }
 
   async GetPageVariables(http:HttpClient)
@@ -236,11 +210,15 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
     }
   }
 
+  editMyDetails() {
+   this.changepages({pagename:"Settings", navpage:"usersettings"})
+  }
+
   TakeMeHome()
   {
     
     this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages)
-    this.changepage({pagename:"Main Page",navpage:"mainpage"});
+  //  this.changepages({pagename:"Main Page",navpage:"mainpage"});
   }
 
   ngOnDestroy(): void {

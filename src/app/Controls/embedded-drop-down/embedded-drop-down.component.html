@@ -1,22 +1,24 @@
-<div class="main-container">
-    <div *ngIf="structure.items != undefined && structure.showchildren && allowchildren">
-        <div *ngFor="let item of items.sort()">
-            <div class="myrow">
-                <div class="child-check" *ngIf="allowchildcheckbox == true">
-                    <input  (input)="ValueChanged()" [(ngModel)]="structure.items[item].enable" type="checkbox">
-                </div>
-                <div class="child">
-                    <div class="clickable child-text" (click)="  
-                    structure.items[item].enable = !structure.items[item].enable; 
-                    ValueChanged(); ChildClicked(item)">{{item}}</div>
-                </div>
-            </div>
+
+<div *ngFor="let node of names.sort()">
+    
+        <button mat-button style="width: 90%; border:none; height: 40px;"
+            (click)="structure[node].showchildren = !structure[node].showchildren; " >
+            <b [style.margin-left]="countUp * 5 + '%'">{{node}}</b>
+        </button>
+
+    <app-embedded-drop-down [recursionCount]="countUp" [allowchildcheckbox]="allowchildcheckbox"
+        [allowchildren]="allowchildren" *ngIf="structure[node].showchildren" (valuechanged)="ValueChanged()"
+        (childclicked)="ChildClicked($event)" [structure]="structure[node]"></app-embedded-drop-down>
+</div>
+<div *ngFor="let item of items.sort()">
+    <div class="myrow">
+        <div class="child-check" *ngIf="allowchildcheckbox == true">
+            <input (input)="ValueChanged()" [(ngModel)]="structure.items[item].enable" type="checkbox">
         </div>
-    </div>
-    <div *ngFor="let node of names.sort()">
-        <div class="myrow parent">
-                <div class="clickable" (click)="structure[node].showchildren = !structure[node].showchildren">{{node}} </div>
-        </div>
-        <app-embedded-drop-down [allowchildcheckbox]="allowchildcheckbox" [allowchildren]="allowchildren" *ngIf="structure[node].showchildren" (valuechanged)="ValueChanged()" (childclicked)="ChildClicked($event)" [structure]="structure[node]"></app-embedded-drop-down>
+        <button class="child" style="width: 90%; border:none; height: 35px; text-align: center;">
+            <div class="clickable child-text" (click)="  
+            structure.items[item].enable = !structure.items[item].enable; 
+            ValueChanged(); ChildClicked(item)"><b [style.margin-left]="countUp * 5 + 1 + '%'"></b>{{item}}</div>
+        </button>
     </div>
 </div>

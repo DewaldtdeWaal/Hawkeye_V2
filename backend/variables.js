@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var num = 1
+var num = 0
 
 
  //////////////////////////////////////////////////localhost Connection String

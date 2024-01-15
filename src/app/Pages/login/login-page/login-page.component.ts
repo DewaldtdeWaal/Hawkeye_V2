@@ -9,7 +9,7 @@ import { UserAuthenticationService } from 'src/app/user-authentication.service';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent {
-
+isLoading:any
   enteredTitle = "";
   enteredContent = "";
 

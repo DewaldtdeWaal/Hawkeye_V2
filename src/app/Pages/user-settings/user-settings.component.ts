@@ -25,7 +25,7 @@ SetNewPassword()
   if(this.confirmpassword == this.newpassword)
   {
     var message = {requesttype:"set user password",user:this.userauth.email,oldpassword:this.oldpassword,newpassword:this.newpassword}
-    this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res)=>
+    this.http.post<any>(this.commservice.postHostName,message).subscribe((res)=>
     {
       this.oldpassword = ""
       this.newpassword = ""

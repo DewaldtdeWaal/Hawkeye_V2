@@ -39,7 +39,7 @@ export class PageAssignerComponent implements AfterContentInit {
   async GetUserData()
   {
     const message = {requesttype: "get page assignments", customers:this.customers}
-    this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
+    this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
     {
       this.pageassignments = res
       this.users = []
@@ -135,7 +135,7 @@ export class PageAssignerComponent implements AfterContentInit {
         userList.push(user)
 
         const message = {requesttype: "set page assignments", user:this.userauth.email ,assignments:userList}
-        this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
+        this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
         {
           this.disableuserchange = false
           this.currentuser = ""

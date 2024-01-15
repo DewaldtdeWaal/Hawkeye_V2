@@ -48,7 +48,7 @@ DeletePage()
   this.pagechangedisabled = true;
   this.cansave = false;
   const message = {requesttype: "delete page", user:this.userAuth.email, pageid: this.currentstructure.id}
-  this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
+  this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
   {
     this.PageChanged();
     this.pagechangedisabled = false;
@@ -76,7 +76,7 @@ SavePage()
   this.cansave = false;
   this.disablecreationpage = true;
   const message = {requesttype: "add page", user:this.userAuth.email, page: this.currentstructure}
-  this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
+  this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
   {
       this.currentstructure.id = res.response
       this.disablecreationpage = false;

@@ -59,7 +59,7 @@ export class UserManagementComponent implements AfterContentInit {
 
   GetUsers()
   {
-    this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"get users",user:this.userauth.email}).subscribe((resp)=>
+    this.http.post<any>(this.commservice.postHostName,{requesttype:"get users",user:this.userauth.email}).subscribe((resp)=>
     {
 
 
@@ -149,7 +149,7 @@ export class UserManagementComponent implements AfterContentInit {
 
     if(selectedProject == true)
     {
-      this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"create user",user:this.userauth.email,userdata:this.selecteduserObj}).subscribe((resp)=>
+      this.http.post<any>(this.commservice.postHostName,{requesttype:"create user",user:this.userauth.email,userdata:this.selecteduserObj}).subscribe((resp)=>
       {
         var found = false
         for(var i = 0; i < this.fetchedusers.length; i++)
@@ -198,7 +198,7 @@ export class UserManagementComponent implements AfterContentInit {
 
   DeleteUser()
   {
-    this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"delete user",user:this.userauth.email,userdata:{email:this.selecteduserObj.email,userid:this.selecteduserObj.userid}}).subscribe((resp)=>
+    this.http.post<any>(this.commservice.postHostName,{requesttype:"delete user",user:this.userauth.email,userdata:{email:this.selecteduserObj.email,userid:this.selecteduserObj.userid}}).subscribe((resp)=>
     {
       
       var index = -1

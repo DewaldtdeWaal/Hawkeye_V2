@@ -1,8 +1,10 @@
-<div class="main-container">
+<app-header (messageEvent)="changepage($event)">
+
+<!-- <div class="main-container">
     <div class="title-bar">
         <div class="title-bar-text-main">
                 <div  class="title-text" [innerHTML]="title"></div>
-                <!-- [ngStyle]="{'font-size':fontsize.toString() + 'px'}" -->
+         
                 <div class="logout">
                     <button (click)="LogOut()">LogOut</button>
                 </div>
@@ -14,21 +16,15 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="title-bar-logout">
-            <div class="title-icon-logout-holder">
-                <div class="logout-button">
-                    <button (click)="LogOut()">LogOut</button>
-                </div>
-            </div>
-        </div> -->
-    </div>
+        
+    </div> -->
     <div class="page-rendering">
-        <ng-container *ngIf="currentpage == 'mainpage' && this.links.length > 0">
+         <!-- <ng-container *ngIf="currentpage == 'mainpage' && this.links.length > 0">
             <app-main-page [heirarchy]="pageheirarchy" [links]="this.links" (pagechanged)="changepage($event)"></app-main-page>
-        </ng-container >
+        </ng-container> -->
         <ng-container *ngIf="currentpage == 'site'">
             <app-dynamic-site-page [structure]="sitestructure"></app-dynamic-site-page>
-        </ng-container >
+        </ng-container > 
         <ng-container  *ngIf="currentpage == 'development'">
             <app-developer-page [heirarchystructure]="pageheirarchy" (discardchanges)="DiscardDeveloperChanges()" (savechanges)="SaveDeveloperChanges($event)" (pagechanged)="PageChanged()" [customers]="userdata.customers" [structure]="copyofuserdata" ></app-developer-page>
         </ng-container> 
@@ -48,6 +44,4 @@
             <app-user-settings [userdata]="userdata"></app-user-settings>
         </ng-container>
     </div>
-</div>
-
-
+</app-header>

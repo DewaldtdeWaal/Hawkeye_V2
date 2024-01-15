@@ -45,7 +45,7 @@ export class UserAuthenticationService implements OnDestroy
 
     login(email, password, navigate){
         var message = {requesttype: "user login", userdata:{email: email, password: password}}
-        this.httpClient.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/login", message).subscribe((resp) =>
+        this.httpClient.post<any>(this.commservice.loginHostName, message).subscribe((resp) =>
         {
            
             if(resp.token)

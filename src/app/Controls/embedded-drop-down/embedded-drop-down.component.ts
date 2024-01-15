@@ -1,4 +1,5 @@
 import { AfterContentInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { number } from 'echarts';
 
 @Component({
   selector: 'app-embedded-drop-down',
@@ -11,18 +12,49 @@ export class EmbeddedDropDownComponent implements AfterContentInit, OnChanges {
   @Input() allowchildren:any = true
   @Output() valuechanged = new EventEmitter<any>()
   @Output() childclicked = new EventEmitter<any>()
+
+  @Input() recursionCount: number;
+  @Input() generationStatus: string;
+  generation: any;
   display:any = false
-  names:any = []
-  items:any = []
+  names: any = [];
+  items:any = [];
+
+  countUp:any
+
+  percentage: any
+  
+
+  hideChildren() {
+    // this.structure.showchildren = false
+    
+    console.log(this.structure)
+  }
+
+  ngOnInit() {
+     this.hideChildren();
+  }
 
   ngAfterContentInit(): void {
     this.GetCurrentNames()
     this.GetItems()
   }
 
+  
+
   ngOnChanges(changes: SimpleChanges): void {
     this.GetCurrentNames()
-    this.GetItems()
+    this.GetItems();
+
+    if (this.recursionCount == undefined)
+      {
+      this.countUp = 0;
+      this.percentage = this.countUp;
+  }
+      else {
+      this.countUp = ++this.recursionCount;
+      this.percentage = this.countUp * 5;
+    }
   }
 
   GetCurrentNames()
@@ -36,8 +68,11 @@ export class EmbeddedDropDownComponent implements AfterContentInit, OnChanges {
     }
   }
 
+ 
   GetItems()
   {
+
+
     this.items = []
 
     for(var item in this.structure.items)
@@ -49,6 +84,8 @@ export class EmbeddedDropDownComponent implements AfterContentInit, OnChanges {
 
   ChildClicked(item)
   {
+
+    console.log(item)
     this.childclicked.emit(item)
   }
 

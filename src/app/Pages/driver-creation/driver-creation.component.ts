@@ -111,7 +111,7 @@ export class DriverCreationComponent implements OnChanges {
       let data = reader.result
       
       var message = {requesttype:"add driver", user:"Brandon", driver: data}
-      this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
+      this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
       {
         
       })
