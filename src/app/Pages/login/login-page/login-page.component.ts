@@ -16,10 +16,16 @@ isLoading:any
   email : string;
   password : string;
 
-  constructor(private router:Router, public userAuth : UserAuthenticationService ) {}
 
-  onSubmit (form : NgForm)
+  constructor(private router: Router, public userAuth: UserAuthenticationService) { }
+  
+ togglePasswordVisibility(passwordInput: HTMLInputElement): void {
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+  }
+  onSubmit(form : NgForm)
   {
+
+    console.log(form.value)
     if (form.invalid){
       return;
     }

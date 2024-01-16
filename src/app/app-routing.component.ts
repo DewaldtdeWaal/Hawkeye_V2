@@ -4,7 +4,7 @@ import { MainPageComponent } from "./Pages/main-page/main-page.component";
 import { DynamicSitePageComponent } from "./Pages/dynamic-site-page/dynamic-site-page.component";
 
 import { AppMainComponent } from "./app-main/app-main.component";
-import { LoginPageComponent } from "./Pages/login/login-page/login-page.component";
+import { LoginPageComponent } from 'src/app/Pages/login/login-page/login-page.component';
 import { RouteGuard } from "./route-guard.service";
 
 const routes: Routes = [

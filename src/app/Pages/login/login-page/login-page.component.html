@@ -1,13 +1,25 @@
-<div fxLayoutAlign="center center">
-  <mat-card fxFlex="25">
-    <form>
-      <mat-form-field>
-        <input matInput type="email" placeholder="Email">
-      </mat-form-field>
+<body>
 
-      <mat-form-field>
-        <input matInput type="password" placeholder="Password">
-      </mat-form-field>
-    </form>
-  </mat-card>
-</div>
+<section class="login-form">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div id="container">
+      <div id="container_1">
+        <img height="200" src="assets/img/HNB.png" style="margin: auto;">
+        <img height="125" src="assets/img/logo.jpg" style="margin: auto;">
+      </div>
+        <div id="container_2">
+      <h1>Hawk Eye</h1>
+
+      <input class="inputClass" [(ngModel)]="email" name="email" type="text" placeholder="Email" />
+          <div class="password-container">
+            <input class="inputClass" [(ngModel)]="password" name="password" type="password" placeholder="Password"
+              #passwordInput />
+            <input type="checkbox" (change)="togglePasswordVisibility(passwordInput)" /> Show Password
+          </div>
+
+      <button type="submit">Login</button>
+    </div>
+    </div>
+  </form>
+</section>
+</body>
