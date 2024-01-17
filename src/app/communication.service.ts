@@ -6,6 +6,8 @@ export class CommunicationService
     public ipaddressorhostname:string;
     public loginHostName:string;
     public postHostName: string;
+    public getThemeHostName: string;
+    public postThemeHostName: string;
     
     constructor(){
         if(this.num == 0){
@@ -18,8 +20,14 @@ export class CommunicationService
 
         this.loginHostName = this.ipaddressorhostname + "login";
 
-        this.postHostName = this.ipaddressorhostname+"posts";
-}
+        this.postHostName = this.ipaddressorhostname + "posts";
+        
+        this.getThemeHostName = this.ipaddressorhostname + "getTheme"
+
+        this.postThemeHostName = this.ipaddressorhostname + "setTheme"
+   
+    }
+    
 
 
  

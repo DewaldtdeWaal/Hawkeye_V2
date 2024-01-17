@@ -25,6 +25,7 @@
     "bootstrap": "^3.4.1",
     "echarts": "^5.4.3",
     "jsonwebtoken": "^9.0.2",
+    "mongoose-unique-validator": "^4.0.0",
     "ngx-echarts": "^17.1.0",
     "nodemon": "^3.0.2",
     "rxjs": "~7.8.0",

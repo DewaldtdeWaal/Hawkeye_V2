@@ -17,6 +17,8 @@ const signer = "This is the token signer string that i have decided to use and i
 var queryData = {}
 var lockRead = false
 
+
+
  
 usercollection = "HawkEyeUsers"
 pagecollection = "HawkEyePages"
@@ -32,8 +34,11 @@ class QueryData
 }
 
 const app = express();
-
+const theme = require('./routes/theme');
+app.use(theme);
 app.use(bodyParser.json());
+
+
 app.use(bodyParser.urlencoded({extended: false}));
 
 
@@ -85,7 +90,7 @@ async function Login(req, res, next)
 
             if(email && password)
             {
-                var userEntry = await GetSecureUserEntry(email,password)
+                var userEntry = await GetSecureUserEntry(email, password);
     
                 output = {}
                 var status = 200
@@ -1294,7 +1299,7 @@ async function getFromDB(collection,filter,sort)
             });
     });
 }
-
+//Update
 async function updateItemDB(collection,filter,update) 
 {
     GetDB()

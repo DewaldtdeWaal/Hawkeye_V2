@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Inject, OnDestroy, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { UserAuthenticationService } from '../user-authentication.service';
@@ -6,14 +6,17 @@ import { Router } from '@angular/router';
 import { SiteStorageService } from '../site-storage.service';
 import { CommunicationService } from '../communication.service';
 import { HeirarchyEditor } from '../heirarchy-editor.service';
+import { DOCUMENT } from '@angular/common';
+import { header } from "src/app/Service-Files/headerToggle";
 
-import {header} from "src/app/Service-Files/headerToggle"
+import { Theme } from "src/app/Service-Files/getTheme.service"
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  theme: any = localStorage.getItem("theme");
   userdata:any = {}
   disablenavigation:any = false
   copyofuserdata:any = null
@@ -28,9 +31,15 @@ export class HeaderComponent {
   pageheirarchy:any = {}
   opened=false;
   @Output() messageEvent = new EventEmitter<string>()
-  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor)
+  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme ,)
   {
+
+    if (this.theme == "dark-theme") {
+          document.body.classList.toggle('dark-theme');
+    }
   }
+
+  
 
   ngAfterContentInit(): void {
     
@@ -220,6 +229,25 @@ export class HeaderComponent {
     this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages)
   //  this.changepages({pagename:"Main Page",navpage:"mainpage"});
   }
+
+
+
+  switchTheme() {
+  
+
+
+
+
+    if (this.theme == "light-theme")
+    {
+      localStorage.setItem("theme", "dark-theme")
+    }
+    else {
+      localStorage.setItem("theme", "light-theme")
+    }
+ window.location.reload();
+
+}
 
   ngOnDestroy(): void {
     clearTimeout(this.timer);

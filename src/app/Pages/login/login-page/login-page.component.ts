@@ -17,7 +17,12 @@ isLoading:any
   password : string;
 
 
-  constructor(private router: Router, public userAuth: UserAuthenticationService) { }
+
+
+
+  constructor(private router: Router, public userAuth: UserAuthenticationService) { 
+      localStorage.setItem('theme', 'light-theme');
+  }
   
  togglePasswordVisibility(passwordInput: HTMLInputElement): void {
     passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
