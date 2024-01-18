@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     justify-content: space-around;
     width:100%;
+    background-color: var(--page-background-color);
 }
 
 .sub-container{

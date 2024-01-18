@@ -7,7 +7,7 @@
 
         <button color="color: rgb(255, 255, 255);background-color: rgb(89 105 128); accent" style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important; margin-left: auto;" [matMenuTriggerFor]="account" >
             <mat-icon  style="vertical-align: middle;">account_circle</mat-icon>
-        <mat-menu #account="matMenu">
+        <mat-menu #account="matMenu" >
             <h3 style="text-align: center;">Hi</h3>
         <hr style="margin-top: -8px;">
 
@@ -18,7 +18,7 @@
    </button>
     </mat-toolbar-row>
 
-    <!-- (click)="LogOut()" -->
+    
     </mat-toolbar >
 
         <mat-sidenav [(opened)]="opened" mode="over"  >
