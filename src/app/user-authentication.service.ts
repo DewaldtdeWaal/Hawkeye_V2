@@ -47,7 +47,7 @@ export class UserAuthenticationService implements OnDestroy
         var message = {requesttype: "user login", userdata:{email: email, password: password}}
         this.httpClient.post<any>(this.commservice.loginHostName, message).subscribe((resp) =>
         {
-           
+           console.log(resp)
             if(resp.token)
             {
                 var now = new Date()
@@ -56,6 +56,10 @@ export class UserAuthenticationService implements OnDestroy
                 this.setLogin(resp.token, resp.validperiod,email)
                 this.router.navigate([navigate])
                 this.siteStorage.setStructure(resp.userdata)
+
+                var theme = resp.displaymode
+
+                localStorage.setItem("theme", theme)
             }
         })
     }
@@ -111,6 +115,7 @@ export class UserAuthenticationService implements OnDestroy
         localStorage.removeItem('token')
         localStorage.removeItem('expirationDate')
         localStorage.removeItem('email')
+        localStorage.removeItem("theme")
     }
 
     private getAuthData()

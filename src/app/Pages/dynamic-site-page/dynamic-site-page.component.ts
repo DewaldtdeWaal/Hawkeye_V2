@@ -7,23 +7,44 @@ import { HttpClient } from '@angular/common/http'
   styleUrls: ['./dynamic-site-page.component.css']
 })
 export class DynamicSitePageComponent implements AfterContentInit {
-  @Input() structure:any  = {components:[]} 
+  @Input() structure: any = { components: [] };
 
-  constructor(private http: HttpClient){
+  
+
+  constructor(private http: HttpClient) {}
+
+  siteTitle: string = "Site Title";
+
+  chatVariable: any;
+
+
+  ngOnInit() {
+        let i = 0;
+
+    console.log(this.structure)
+
+    while (i < this.structure.components.length) {
+
+
+      let componentType = this.structure.components[i].components[0].componentType;
+      let component = this.structure.components[i].components[0]
+      console.log(componentType)
+
+      if (componentType == "chart")
+      {
+     
+
+        this.chatVariable = componentType
+      }
+        
+        
+      i++
+    }
   }
 
-
-
-  // AskForData()
-  // {
-  //   const message = {structure: this.structure}
-  //   this.http.post<any>("http://139.144.176.232:46568/api/posts",message).subscribe((res) => 
-  //   {
-  //     this.structure = res.structure
-  //   })
-  //   setTimeout(this.AskForData,30000)
-  // }
 
   ngAfterContentInit(): void {
+
   }
+
 }

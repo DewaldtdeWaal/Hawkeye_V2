@@ -15,8 +15,8 @@ export class RealScanComponent implements OnChanges {
     "unit": "",
     "value" : ""}
 
-  value="" 
-  unit=""
+  value = "";
+  unit = "";
 
     ngOnChanges(): void 
     {

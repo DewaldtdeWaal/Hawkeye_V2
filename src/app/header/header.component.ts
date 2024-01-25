@@ -8,8 +8,8 @@ import { CommunicationService } from '../communication.service';
 import { HeirarchyEditor } from '../heirarchy-editor.service';
 import { DOCUMENT } from '@angular/common';
 import { header } from "src/app/Service-Files/headerToggle";
-
-import { Theme } from "src/app/Service-Files/getTheme.service"
+import { Theme } from "src/app/Service-Files/getTheme.service";
+ 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -31,6 +31,8 @@ export class HeaderComponent {
   pageheirarchy:any = {}
   opened=false;
   @Output() messageEvent = new EventEmitter<string>()
+
+  pageTitle:any = "PlaceHolder"
   constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme ,)
   {
 
@@ -74,6 +76,8 @@ export class HeaderComponent {
   LogOut()
   {
     this.userauth.logout()
+
+    localStorage.removeItem("theme")
   }
 
   DiscardDeveloperChanges()
@@ -143,7 +147,6 @@ export class HeaderComponent {
 
     var event = $event
 
-    console.log(event)
     this.messageEvent.emit(event)
   }
 
@@ -231,7 +234,7 @@ export class HeaderComponent {
   }
 
 
-
+  email:string = localStorage.getItem("email");
   switchTheme() {
   
 
@@ -241,9 +244,19 @@ export class HeaderComponent {
     if (this.theme == "light-theme")
     {
       localStorage.setItem("theme", "dark-theme")
+
+        this.http.post(this.commservice.postHostName, { requesttype: "set display mode", user: this.email, displaymode:"dark-theme" }).subscribe(resp => {
+      var mode = resp;
+
+
+    })
     }
     else {
       localStorage.setItem("theme", "light-theme")
+     this.http.post(this.commservice.postHostName, { requesttype: "set display mode", user: this.email, displaymode:"light-theme" }).subscribe(resp => {
+      var mode = resp;
+
+    })
     }
  window.location.reload();
 
@@ -254,3 +267,4 @@ export class HeaderComponent {
     this.tokenlistener.unsubscribe();
   }
 }
+

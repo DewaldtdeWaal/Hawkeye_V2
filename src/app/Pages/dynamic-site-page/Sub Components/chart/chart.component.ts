@@ -140,36 +140,12 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     )
   }
 
-  /*
-  
-    {
-      yleftaxisname: '',
-      yrightaxisname: '',
-      trendinformation: 
-      [
-        {
-          name: 'Flow 1',
-          data:[['2022-06-27T10:17:00.000+00:00','0'],...],
-          type: 'bar',
-          yAxisIndex: 1
-        },
-        {
-          ...
-        }
-      ],
-    }
 
-  
-  */ 
 
   options: EChartsOption = 
   { 
     grid: 
     {
-      //left: '6%',
-      //right: '7%',
-      //top:'10%',
-      //bottom: '10%',
       containLabel: true
     },
     toolbox:

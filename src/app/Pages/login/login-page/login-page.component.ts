@@ -30,7 +30,7 @@ isLoading:any
   onSubmit(form : NgForm)
   {
 
-    console.log(form.value)
+
     if (form.invalid){
       return;
     }

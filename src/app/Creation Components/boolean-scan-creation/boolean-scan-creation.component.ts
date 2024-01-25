@@ -61,11 +61,7 @@ export class BooleanScanCreationComponent implements AfterContentInit, OnChanges
   updateChild()
   {
     this.pagechanged.emit()
-    // var Dex:String = this.structure["useIcon"]
-    // if(Dex.toLowerCase() == "true")
-    //   this.structure["useIcon"] = true
-    // else
-    //   this.structure["useIcon"] = false
+
 
     this.structure["componentType"] = "boolean_scan"
     this.structure["value"] = ""

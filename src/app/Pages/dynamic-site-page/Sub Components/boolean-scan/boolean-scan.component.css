@@ -27,6 +27,27 @@
 
 .myrow
 {
-    display: flex;
-    flex-flow: row nowrap;
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    font-size: 12px;
+grid-auto-rows: 30px;
+}
+
+.grid1{
+    display: grid;
+    grid-column: 1;
+    float: right;
+    text-align: center;
+    align-items: center;
+        text-align: center;
+  
+}
+
+.grid3{
+    display: grid;
+    grid-column: 3;
+    float: left;
 }

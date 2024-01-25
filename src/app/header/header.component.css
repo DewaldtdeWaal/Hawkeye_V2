@@ -4,7 +4,7 @@ mat-sidenav{
 } 
 
 
-::ng-deep .mat-menu-content {
-    background-color: var(--form-background-color);
-    color: var(--form-text-color)
+::ng-deep .customize {
+    background-color: var(--form-background-color) !important;
+    color: var(--res-level-text-color)
 }

@@ -6,17 +6,10 @@
     flex-flow: row wrap;
     place-content: center center;
     margin-top: 10px;
+    overflow:scroll
 }
 
-/* .secondary-container
-{
-     height:100px;
-    width:300px;
-    display:flex;
-    flex-flow:column nowrap;
-    justify-content: center;
-    align-items: center; 
-} */
+
 
 .trend-container
 {

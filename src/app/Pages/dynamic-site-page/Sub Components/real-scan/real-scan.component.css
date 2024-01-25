@@ -1,0 +1,21 @@
+.myrow {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    font-size: 12px;
+    grid-auto-rows: 30px;
+}
+
+.grid1 {
+    display: grid;
+    grid-column: 1;
+    margin-left: auto;
+}
+
+.grid3 {
+    display: grid;
+    grid-column: 3;
+    margin-right: auto;
+}

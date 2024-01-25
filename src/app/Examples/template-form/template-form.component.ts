@@ -17,7 +17,6 @@ export class TemplateFormComponent {
 
   OnSubmit()
   {
-    console.log(this.LoginForm.value)
     this.LoginForm.reset({
       'email':'',
       'password':'',

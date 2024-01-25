@@ -1,26 +1,33 @@
-.container-head {
-    background-color: #777777;
-    border-style: solid;
-    border-color: black;
-    margin-top: 20px;
-    box-shadow: 5px 5px 5px #222222;
-    width:100%;
+.res-form {
+    padding-top: 10px;
+    flex-wrap: wrap;
+    color: var(--form-text-color);
+    background-color: var(--page-background-color);
+
 }
 
-.container-description-holder {
-    background-color: black; 
-    height: 30px;
+.div-form {
+    height: auto;
+    width: 350px;
+    max-width: auto;
+    min-width: auto;
+
+    color: var(--form-text-color);
+    background-color: var(--form-background-color);
+    box-shadow: 5px 5px 5px var(--form-box-shadows);
+
+}
+
+h3 {
+    text-align: center;
+    /* padding-top: 5px; */
+    margin-top: 5px;
+    font-size: 20px;
+    padding-top: 0;
+}
+
+.component-container {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.container-description {
-    color: white;
-}
-
-.component-container{
-    display:flex;
     justify-content: center;
-    width:100%;
+    width: 100%;
 }

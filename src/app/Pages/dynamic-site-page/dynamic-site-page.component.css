@@ -1,8 +1,10 @@
 .main-container{
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    width:100%;
+display: grid;
+    grid-template-columns: auto;
+    grid-template-columns: repeat(auto-fit, 360px);
+    justify-content: center;
+    align-items: top;
+    height: 100%;
     background-color: var(--page-background-color);
 }
 
@@ -11,3 +13,14 @@
     flex-shrink: 0;
 }
 
+
+.div-heading-title {
+    padding-top: 6px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 102;
+}

@@ -1,8 +1,11 @@
 
-<p *ngIf="!structure.useIcon" [innerHTML]="GetDisplayValue()" style="color:black;"></p>
+<p *ngIf="!structure.useIcon" [innerHTML]="GetDisplayValue()" style="color: var(--res-level-text-color)"></p>
 
 <div class="myrow" *ngIf="structure.useIcon">
-    <p style="color:black;">{{structure.description + ':'}} </p>
+    <div class="grid1">
+    <div style="color: var(--res-level-text-color);">{{structure.description + ':'}} </div>
+    </div>
+    <div class="grid3">
     <svg style="display:none" class="global-svg">
         <symbol id="check">
             <circle class="check-rim" cx="12" cy="12" r="10"/>
@@ -44,5 +47,5 @@
     <svg *ngIf="!GetValue()" viewBox="0 0 24 24" [attr.width]="iconsize" [attr.height]="iconsize">
         <use  [attr.xlink:href]="'#' + structure.falseIcon"/>
     </svg>
-
+</div>
 </div>

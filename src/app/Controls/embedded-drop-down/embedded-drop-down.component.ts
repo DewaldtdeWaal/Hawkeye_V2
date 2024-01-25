@@ -27,8 +27,7 @@ export class EmbeddedDropDownComponent implements AfterContentInit, OnChanges {
 
   hideChildren() {
     // this.structure.showchildren = false
-    
-    console.log(this.structure)
+
   }
 
   ngOnInit() {
@@ -85,7 +84,6 @@ export class EmbeddedDropDownComponent implements AfterContentInit, OnChanges {
   ChildClicked(item)
   {
 
-    console.log(item)
     this.childclicked.emit(item)
   }
 

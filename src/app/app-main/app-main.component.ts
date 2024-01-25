@@ -13,7 +13,7 @@ import { HeirarchyEditor } from '../heirarchy-editor.service';
   styleUrls: ['./app-main.component.css']
 })
 export class AppMainComponent implements OnDestroy, AfterContentInit {
-  userdata:any = {}
+  userdata: any = {};
   disablenavigation:any = false
   copyofuserdata:any = null
   sitestructure:any = null
@@ -137,8 +137,6 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
   event:any;
   changepage($event:any)
   {
-    console.log($event)
-
     var event = $event
     for(var i = 0;i < this.userdata.pages.length; i++)
     {

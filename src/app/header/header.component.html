@@ -1,25 +1,26 @@
 
 <mat-sidenav-container fullscreen>
 
-  <mat-toolbar style="background-color: rgb(89 105 128);">
-    <mat-toolbar-row>
-        <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
-
-        <button color="color: rgb(255, 255, 255);background-color: rgb(89 105 128); accent" style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important; margin-left: auto;" [matMenuTriggerFor]="account" >
-            <mat-icon  style="vertical-align: middle;">account_circle</mat-icon>
-        <mat-menu #account="matMenu" >
-            <h3 style="text-align: center;">Hi</h3>
-        <hr style="margin-top: -8px;">
-
-        <button mat-menu-item style=" color: var(--res-level-text-color)!important;  background-color: var(--form-background-color);"  (click)="editMyDetails()">Edit Details</button>
-        <button mat-menu-item style=" color: var(--res-level-text-color)!important;  background-color: var(--form-background-color);"  (click)="switchTheme()" >Switch Theme</button>
-        <button mat-menu-item style=" color: var(--res-level-text-color)!important;  background-color: var(--form-background-color);"  (click)="LogOut()">Log Out</button>
-    </mat-menu>
-   </button>
-    </mat-toolbar-row>
-
+<mat-toolbar style="background-color: rgb(89 105 128);">
+  <mat-toolbar-row>
     
-    </mat-toolbar >
+    <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
+
+    <!-- Centered h1 element -->
+    <div style="margin-left: auto;">{{pageTitle}}</div>
+
+
+    <button mat-button [matMenuTriggerFor]="User" color="color: rgb(255, 255, 255);background-color: rgb(89 105 128); accent" style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important; margin-left: auto;"><mat-icon style="vertical-align: middle;">account_circle</mat-icon></button>
+    <mat-menu #User="matMenu" class="customize">
+      <h3 style="text-align: center;">Hi</h3>
+      <hr style="margin-top: -8px;">
+      <button mat-menu-item style="color: var(--res-level-text-color)!important;" (click)="editMyDetails()">Edit Details</button>
+      <button mat-menu-item style="color: var(--res-level-text-color)!important;" (click)="switchTheme()">Switch Theme</button>
+      <button mat-menu-item style="color: var(--res-level-text-color)!important;" (click)="LogOut()">Log Out</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 
         <mat-sidenav [(opened)]="opened" mode="over"  >
             <ng-container *ngIf="currentpage == 'mainpage' && this.links.length > 0">

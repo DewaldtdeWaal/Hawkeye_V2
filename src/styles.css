@@ -4,6 +4,8 @@ html{
     width:100%;
 }
 
+
+
 .drop-down
 {
     width:200px;
@@ -187,8 +189,8 @@ body.dark-theme {
     
 
 
-        height: 100%;
-            width: 100%;
+    height: 100%;
+    width: 100%;
     --page-background-color: rgb(77, 78, 82);
 
     --mat-toolbar-background-color: rgb(89, 105, 128);
@@ -247,4 +249,9 @@ h1 {
     padding: 10px 15px;
     background-color: var(--toggle-BC);
     transition: all .1s ease;
+}
+
+::ng-deep .mat-menu-content {
+    background-color: var(--form-background-color);
+    color: var(--form-text-color)
 }
