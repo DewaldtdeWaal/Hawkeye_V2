@@ -7,7 +7,7 @@
     <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
 
     <!-- Centered h1 element -->
-    <div style="margin-left: auto;">{{pageTitle}}</div>
+    <div style="margin-left: auto; color: rgb(255, 255, 255);" >{{pageTitle}}</div>
 
 
     <button mat-button [matMenuTriggerFor]="User" color="color: rgb(255, 255, 255);background-color: rgb(89 105 128); accent" style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important; margin-left: auto;"><mat-icon style="vertical-align: middle;">account_circle</mat-icon></button>
@@ -29,16 +29,7 @@
             <ng-container *ngIf="currentpage == 'site'">
                 <app-dynamic-site-page [structure]="sitestructure"></app-dynamic-site-page>
             </ng-container > 
-      
-  
-      
-    
-       
-        </mat-sidenav>
-
-        <ng-content>
+        </mat-sidenav><ng-content>
             
         </ng-content>
-       
-
-    </mat-sidenav-container>
+</mat-sidenav-container>

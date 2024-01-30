@@ -136,10 +136,11 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
 
   event:any;
   changepage($event:any)
-  {
+  { 
     var event = $event
     for(var i = 0;i < this.userdata.pages.length; i++)
     {
+      console.log(this.userdata); console.log("this.userdata"); console.log("this.userdata")
       if(this.userdata.pages[i].pageName == event.pagename)
       {
         this.sitestructure = this.userdata.pages[i]
@@ -211,6 +212,7 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
               }
             }
           }
+
         }
 
         
@@ -232,6 +234,10 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
 
 
     }
+
+              console.log("sitestructure")
+          console.log(sitestructure)
+          console.log("sitestructure")
   }
 
   TakeMeHome()

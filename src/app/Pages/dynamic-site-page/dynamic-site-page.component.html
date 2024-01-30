@@ -1,5 +1,12 @@
-<div class="main-container">
-    
-        <app-container  *ngFor="let comp of structure.components; let i = index" [structure]="structure.components[i]"></app-container>
-    
+<div style="height: 100%;background-color: var(--page-background-color); ;">
+        <div class="main-container">
 
+                <app-container *ngFor="let comp of shortenedStructure; let i = index"
+                        [structure]="shortenedStructure[i]"></app-container>
+
+
+        </div>
+        <div *ngIf="showTrend==true">
+                <app-chart style="width:100%; z-index: 100;" [structure]="chartStructure"></app-chart>
+        </div>
+</div>

@@ -40,7 +40,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     {
       this.HandleYAxis()
       this.options.yAxis = this.trendYaxis
-      this.options.series = this.structure.trendinformation;
+      this.options.series = this.structure[0].components[0].trendinformation;
     }
   }
   
@@ -81,58 +81,109 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     this.trendYaxis.push(currentItem)
   }
 
+  GetMidnightTime(time)
+  {
+    var timemodifier = new Date(time).getTime()
+    var tempDate = new Date(timemodifier)
+
+    // timemodifier /= (1000 * 60 * 60 * 24)
+    // timemodifier = Math.trunc(timemodifier)
+
+    // var tempDate = new Date(timemodifier)
+    // timemodifier *= (1000 * 60 * 60 * 24)
+
+    // timemodifier -= tempDate.getHours() * 60 * 60 * 1000
+
+    timemodifier = timemodifier - ((tempDate.getHours() * 60 * 60 * 1000) + (tempDate.getMinutes() * 60 * 1000) + (tempDate.getSeconds()* 1000))
+
+     timemodifier /= 1000
+     timemodifier = Math.trunc(timemodifier)
+     timemodifier *= 1000
+
+    return (new Date(timemodifier))
+  }
+
   Trend()
   {
-    this.disableChart = true //WDNR_ROSE_RES_OUT01
 
-    var sites = []
+    console.log(this.structure[0].components[0].trendinformation)
+    this.disableChart = false //WDNR_ROSE_RES_OUT01
 
-    for(var item of this.structure.trendinformation)
+    var sites = {} // []
+
+    for(var item of this.structure[0].components[0].trendinformation)
     {
-      sites.push(item.sitename)
+      if(sites[item.sitename] == undefined)
+      {
+        sites[item.sitename] = {}// sites.push(item.sitename)
+
+        sites[item.sitename].tags = {}
+      }
+
+      sites[item.sitename].tags[item.tagname] = {}
+      sites[item.sitename].tags[item.tagname].filterscript = item.filterscript
+      sites[item.sitename].tags[item.tagname].result = []
     }
 
-    this.http.post<any>(this.commservice.postHostName,{requesttype:"trend",sites,start:this.starttime,end:this.endtime}).subscribe((res) =>
-      {
-        for(var item of this.structure.trendinformation)
+    var requestedendtime = new Date(this.GetMidnightTime(this.endtime).getTime() + (23*60*60*1000))
+    var requestedstarttime = this.GetMidnightTime(this.starttime)
+
+    this.http.post<any>( "http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"trend",sites,start:requestedstarttime,end:requestedendtime}).subscribe((res) =>
+    {
+      
+      console.log(res)
+        for(var item of this.structure[0].components[0].trendinformation)
         {
-          for(var respitem of res)
+          for(var respitem in res)//var respitem of res)
           {
-            if(respitem.site == item.sitename)
+            if(item.sitename == respitem)
             {
-              item.data = []
-              var lastvalue:any = undefined
-              var currentvalue:any = undefined
-              for(var i = 0; i < respitem.data.length; i++)
+              for(var tagname in res[respitem].tags)
               {
-                if(item.ApplyFlowRateCalculations)
+                if(tagname == item.tagname)
                 {
-                  if(lastvalue != undefined)
-                  {
-                    if(new Date(respitem.data[i].date).getHours() == 0)
-                    {
-                      currentvalue = respitem.data[i][item.tagname]
-                      item.data.push([respitem.data[i].date,currentvalue - lastvalue])
-                      lastvalue = currentvalue
-                    }
-                  }
-                  else
-                  {
-                    if(new Date(respitem.data[i].date).getHours() == 0)
-                    {
-                      lastvalue = respitem.data[i][item.tagname]
-                      //item.data.push([respitem.data[i].date, currentvalue])
-                    }
-                  }
+                  item.data = res[respitem].tags[tagname].result
+                  break
                 }
-                else
-                {
-                  item.data.push([respitem.data[i].date,respitem.data[i][item.tagname]])
-                }
-                
               }
-              break;
+              break
             }
+            
+            // if(respitem.site == item.sitename)
+            // {
+            //   item.data = []
+            //   var lastvalue:any = undefined
+            //   var currentvalue:any = undefined
+            //   for(var i = 0; i < respitem.data.length; i++)
+            //   {
+            //     if(item.ApplyFlowRateCalculations)
+            //     {
+            //       if(lastvalue != undefined)
+            //       {
+            //         if(new Date(respitem.data[i].date).getHours() == 0)
+            //         {
+            //           currentvalue = respitem.data[i][item.tagname]
+            //           item.data.push([respitem.data[i].date,currentvalue - lastvalue])
+            //           lastvalue = currentvalue
+            //         }
+            //       }
+            //       else
+            //       {
+            //         if(new Date(respitem.data[i].date).getHours() == 0)
+            //         {
+            //           lastvalue = respitem.data[i][item.tagname]
+            //           //item.data.push([respitem.data[i].date, currentvalue])
+            //         }
+            //       }
+            //     }
+            //     else
+            //     {
+            //       item.data.push([respitem.data[i].date,respitem.data[i][item.tagname]])
+            //     }
+                
+            //   }
+            //   break;
+            // }
           }
         }
         this.disableChart = false
@@ -140,12 +191,36 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     )
   }
 
+  /*
+  
+    {
+      yleftaxisname: '',
+      yrightaxisname: '',
+      trendinformation: 
+      [
+        {
+          name: 'Flow 1',
+          data:[['2022-06-27T10:17:00.000+00:00','0'],...],
+          type: 'bar',
+          yAxisIndex: 1
+        },
+        {
+          ...
+        }
+      ],
+    }
 
+  
+  */ 
 
   options: EChartsOption = 
   { 
     grid: 
     {
+      //left: '6%',
+      //right: '7%',
+      //top:'10%',
+      //bottom: '10%',
       containLabel: true
     },
     toolbox:

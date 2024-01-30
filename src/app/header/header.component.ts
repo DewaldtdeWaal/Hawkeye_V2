@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, EventEmitter, Inject, OnDestroy, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Inject, OnDestroy, Output, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { UserAuthenticationService } from '../user-authentication.service';
@@ -32,8 +32,8 @@ export class HeaderComponent {
   opened=false;
   @Output() messageEvent = new EventEmitter<string>()
 
-  pageTitle:any = "PlaceHolder"
-  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme ,)
+  pageTitle:any = "Home"
+  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme )
   {
 
     if (this.theme == "dark-theme") {
@@ -41,7 +41,7 @@ export class HeaderComponent {
     }
   }
 
-  
+
 
   ngAfterContentInit(): void {
     
@@ -144,9 +144,9 @@ export class HeaderComponent {
 
   changepages($event:any)
   {
-
     var event = $event
 
+    this.pageTitle = event.pagename
     this.messageEvent.emit(event)
   }
 

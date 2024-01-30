@@ -5,8 +5,10 @@
     display:flex;
     flex-flow: row wrap;
     place-content: center center;
-    margin-top: 10px;
-    overflow:scroll
+    margin-top: 2px;
+
+background-color: var(--page-background-color);
+    ;
 }
 
 
@@ -17,7 +19,7 @@
     display:flex;
     place-content: center;
     margin-top: 10px;
-    margin-bottom: 10px;
+  
 }
 
 .trend
