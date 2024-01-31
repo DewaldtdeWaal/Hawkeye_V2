@@ -26,7 +26,9 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
   private tokenlistener: Subscription = null;
   pageheirarchy:any = {}
 
-  
+  shortenStructure: any[];
+  chartedStructure: any[];
+
 
   constructor(private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor)
   {
@@ -163,14 +165,16 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
     this.currentpage = event.navpage
   }
 
-  async GetPageVariables(http:HttpClient)
+   GetPageVariables(http:HttpClient)
   {
     const message = {requesttype: "variable information", user:this.userauth.email}
     http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
     {
       this.variableData = res
-      if(this.variableData != null && this.sitestructure != null)
-        this.SetSiteStructureVariables(this.sitestructure,this.variableData)
+      if(this.variableData != null && this.sitestructure != null){
+        this.SetSiteStructureVariables(this.sitestructure, this.variableData)
+        this.fillStructures(this.sitestructure)
+        }
 
     })
     
@@ -235,9 +239,26 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
 
     }
 
-              console.log("sitestructure")
-          console.log(sitestructure)
-          console.log("sitestructure")
+  
+    
+
+
+
+
+
+
+
+  }
+
+  fillStructures(sitestructure: any) {
+
+    let chart = "chart"
+  this.shortenStructure = sitestructure.components;
+  this.chartedStructure = this.shortenStructure;
+
+  this.chartedStructure = this.chartedStructure.filter(item => item.components[0].componentType === chart);
+  this.shortenStructure = this.shortenStructure.filter(item => item.components[0].componentType !== chart);
+
   }
 
   TakeMeHome()

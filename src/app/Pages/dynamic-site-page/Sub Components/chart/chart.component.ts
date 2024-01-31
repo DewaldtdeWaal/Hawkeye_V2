@@ -20,11 +20,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
   trendYaxis:any = [];
   
-  constructor(private http:HttpClient, private commservice:CommunicationService)
-  {
-    
-    
-  }
+  constructor(private http:HttpClient, private commservice:CommunicationService){}
   
   ngAfterContentInit(): void {
     this.setparentwidth.emit("100%")
@@ -35,12 +31,16 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
   ngOnChanges()
   {
+
+    console.log("this.structure")
+    console.log(this.structure.components[0].trendinformation)
+     console.log("this.structure")
     this.trendYaxis = [];
     if(this.structure)
     {
       this.HandleYAxis()
       this.options.yAxis = this.trendYaxis
-      this.options.series = this.structure[0].components[0].trendinformation;
+      this.options.series = this.structure.components[0].trendinformation;
     }
   }
   
@@ -86,14 +86,6 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     var timemodifier = new Date(time).getTime()
     var tempDate = new Date(timemodifier)
 
-    // timemodifier /= (1000 * 60 * 60 * 24)
-    // timemodifier = Math.trunc(timemodifier)
-
-    // var tempDate = new Date(timemodifier)
-    // timemodifier *= (1000 * 60 * 60 * 24)
-
-    // timemodifier -= tempDate.getHours() * 60 * 60 * 1000
-
     timemodifier = timemodifier - ((tempDate.getHours() * 60 * 60 * 1000) + (tempDate.getMinutes() * 60 * 1000) + (tempDate.getSeconds()* 1000))
 
      timemodifier /= 1000
@@ -105,13 +97,11 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
   Trend()
   {
-
-    console.log(this.structure[0].components[0].trendinformation)
     this.disableChart = false //WDNR_ROSE_RES_OUT01
 
     var sites = {} // []
 
-    for(var item of this.structure[0].components[0].trendinformation)
+    for(var item of this.structure.components[0].trendinformation)
     {
       if(sites[item.sitename] == undefined)
       {
@@ -130,9 +120,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
     this.http.post<any>( "http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",{requesttype:"trend",sites,start:requestedstarttime,end:requestedendtime}).subscribe((res) =>
     {
-      
-      console.log(res)
-        for(var item of this.structure[0].components[0].trendinformation)
+        for(var item of this.structure.components[0].trendinformation)
         {
           for(var respitem in res)//var respitem of res)
           {
@@ -149,41 +137,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
               break
             }
             
-            // if(respitem.site == item.sitename)
-            // {
-            //   item.data = []
-            //   var lastvalue:any = undefined
-            //   var currentvalue:any = undefined
-            //   for(var i = 0; i < respitem.data.length; i++)
-            //   {
-            //     if(item.ApplyFlowRateCalculations)
-            //     {
-            //       if(lastvalue != undefined)
-            //       {
-            //         if(new Date(respitem.data[i].date).getHours() == 0)
-            //         {
-            //           currentvalue = respitem.data[i][item.tagname]
-            //           item.data.push([respitem.data[i].date,currentvalue - lastvalue])
-            //           lastvalue = currentvalue
-            //         }
-            //       }
-            //       else
-            //       {
-            //         if(new Date(respitem.data[i].date).getHours() == 0)
-            //         {
-            //           lastvalue = respitem.data[i][item.tagname]
-            //           //item.data.push([respitem.data[i].date, currentvalue])
-            //         }
-            //       }
-            //     }
-            //     else
-            //     {
-            //       item.data.push([respitem.data[i].date,respitem.data[i][item.tagname]])
-            //     }
-                
-            //   }
-            //   break;
-            // }
+  
           }
         }
         this.disableChart = false
@@ -191,36 +145,13 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     )
   }
 
-  /*
-  
-    {
-      yleftaxisname: '',
-      yrightaxisname: '',
-      trendinformation: 
-      [
-        {
-          name: 'Flow 1',
-          data:[['2022-06-27T10:17:00.000+00:00','0'],...],
-          type: 'bar',
-          yAxisIndex: 1
-        },
-        {
-          ...
-        }
-      ],
-    }
 
-  
-  */ 
 
   options: EChartsOption = 
   { 
     grid: 
     {
-      //left: '6%',
-      //right: '7%',
-      //top:'10%',
-      //bottom: '10%',
+
       containLabel: true
     },
     toolbox:

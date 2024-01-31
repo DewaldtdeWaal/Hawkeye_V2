@@ -5,7 +5,6 @@
     display:flex;
     flex-flow: row wrap;
     place-content: center center;
-    margin-top: 2px;
 
 background-color: var(--page-background-color);
     ;
@@ -28,6 +27,10 @@ background-color: var(--page-background-color);
     border-radius: 10px;
     width:90%;
     height:400px;
+}
+
+.secondary-container{
+    margin: auto;
 }
 
 button

@@ -1,52 +1,22 @@
-import { Component, ViewChild, AfterContentInit, Input, ChangeDetectorRef} from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-dynamic-site-page',
   templateUrl: './dynamic-site-page.component.html',
   styleUrls: ['./dynamic-site-page.component.css']
 })
-export class DynamicSitePageComponent implements AfterContentInit {
+export class DynamicSitePageComponent implements OnChanges {
   @Input() structure: any = { components: [] };
+  @Input() shortenStructure: any;
+  @Input() chartedStructure: any;
+  @Input() showTrends: any;
 
-  shortenedStructure: any
-  
-  chartStructure:any
+  showTrend: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
-   reloadComponent(): void {
-    // Trigger change detection
-    this.cdr.detectChanges();
+ngOnChanges(changes: SimpleChanges): void {
+  if ('showTrends' in changes) {
+    this.showTrend = changes['showTrends'].currentValue;
   }
-  siteTitle: string = "Site Title";
-
-  chatVariable: any = {};
-
-  showTrend:any
-
-  ngOnInit() {
-
-    this.shortenedStructure = this.structure.components
-    this.chartStructure = this.shortenedStructure
-
-    this.chartStructure = this.chartStructure.filter(item => item.components[0].componentType === "chart");
-
-    console.log()
-    if (this.chartStructure[0].components[0].componentType === "chart") {
-      this.showTrend = true
-    }
-
-    this.shortenedStructure = this.shortenedStructure.filter(item => item.components[0].componentType !== "chart");
-
-
-    console.log(this.chartStructure)
-
-
-  }
-
-
-  ngAfterContentInit(): void { 
-
-  }
+}
 
 }
