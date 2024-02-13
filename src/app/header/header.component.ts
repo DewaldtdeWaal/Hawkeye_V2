@@ -9,6 +9,7 @@ import { HeirarchyEditor } from '../heirarchy-editor.service';
 import { DOCUMENT } from '@angular/common';
 import { header } from "src/app/Service-Files/headerToggle";
 import { Theme } from "src/app/Service-Files/getTheme.service";
+import { ThemeService } from 'src/app/Service-Files/theme.service';
  
 @Component({
   selector: 'app-header',
@@ -33,12 +34,10 @@ export class HeaderComponent {
   @Output() messageEvent = new EventEmitter<string>()
 
   pageTitle:any = "Home"
-  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme )
+  constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme,private themeService:ThemeService )
   {
 
-    if (this.theme == "dark-theme") {
-          document.body.classList.toggle('dark-theme');
-    }
+  
   }
 
 
@@ -121,10 +120,7 @@ export class HeaderComponent {
     this.links = []
       var page:[{pageName:""}] = this.userdata.pages
 
-      // for(var item = 0; item < page.length; item++)
-      // {
-      //   this.links.push({pagename:page[item].pageName, navpage:"site"})
-      // }
+ 
       if(this.userdata.admin)
       {
         this.links.push({pagename:"Page Assignments",navpage:"assignment"})
@@ -228,40 +224,20 @@ export class HeaderComponent {
 
   TakeMeHome()
   {
-    
-    this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages)
-  //  this.changepages({pagename:"Main Page",navpage:"mainpage"});
+    this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages);
   }
 
 
   email:string = localStorage.getItem("email");
   switchTheme() {
   
-
-
-
-
-    if (this.theme == "light-theme")
-    {
-      localStorage.setItem("theme", "dark-theme")
-
-        this.http.post(this.commservice.postHostName, { requesttype: "set display mode", user: this.email, displaymode:"dark-theme" }).subscribe(resp => {
-      var mode = resp;
-
-
-    })
-    }
-    else {
-      localStorage.setItem("theme", "light-theme")
-     this.http.post(this.commservice.postHostName, { requesttype: "set display mode", user: this.email, displaymode:"light-theme" }).subscribe(resp => {
-      var mode = resp;
-
-    })
-    }
- window.location.reload();
+ this.themeService.toggleTheme();
 
 }
 
+  ngOnInit() {
+   document.documentElement.setAttribute('data-theme', this.themeService.getCurrentTheme())
+  }
   ngOnDestroy(): void {
     clearTimeout(this.timer);
     this.tokenlistener.unsubscribe();

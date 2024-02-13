@@ -1,10 +1,6 @@
 <app-header (messageEvent)="changepage($event)" style="z-index: 100;">
 
-
-
-        <!-- <ng-container *ngIf="currentpage == 'site'">
-            <app-dynamic-site-page [structure]="sitestructure"></app-dynamic-site-page>
-        </ng-container >  -->
+    
         <ng-container *ngIf="currentpage == 'site'">
             <app-dynamic-site-page [chartedStructure]="chartedStructure" [shortenStructure]="shortenStructure" ></app-dynamic-site-page>
         </ng-container>

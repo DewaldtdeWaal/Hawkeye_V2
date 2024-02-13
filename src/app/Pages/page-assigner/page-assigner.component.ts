@@ -141,9 +141,6 @@ export class PageAssignerComponent implements AfterContentInit {
           this.currentuser = ""
         })
 
-
-        // this.saveable = true
-        
         break;
       }
     }
@@ -159,14 +156,6 @@ export class PageAssignerComponent implements AfterContentInit {
     }
   }
   
-  // SaveUsers()
-  // {
-  //   const message = {requesttype: "set page assignments", user:this.userauth.email ,assignments:this.pageassignments}
-  //   this.http.post<any>("http://" + this.commservice.ipaddressorhostname + ":3004/api/posts",message).subscribe((res) => 
-  //   {
-  //     //add code to tell parent that page was saved and we can now navigate again
-  //   })
-  //   this.saveable = false
-  // }
+
 
 }

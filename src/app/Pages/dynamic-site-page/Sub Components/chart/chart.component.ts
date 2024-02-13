@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { AfterContentInit, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import {  EChartsOption, registerPostUpdate } from 'echarts';
 import { CommunicationService } from 'src/app/communication.service';
-
+import {ThemeService} from "src/app/Service-Files/theme.service"
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -15,26 +15,21 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
   disableChart:any = false;
 
-  starttime:any
-  endtime:any
+    endtime:any = new Date()
+  starttime: any = new Date(this.endtime.getTime() - (60 * 60 * 24 * 7 * 1000));
+
 
   trendYaxis:any = [];
   
-  constructor(private http:HttpClient, private commservice:CommunicationService){}
+  constructor(private http:HttpClient, private commservice:CommunicationService, private ts : ThemeService ){}
   
   ngAfterContentInit(): void {
-    this.setparentwidth.emit("100%")
-    this.endtime = new Date()
-    this.starttime = new Date(this.endtime.getTime() - (60*60*24*7*1000))
-    this.Trend()
+    this.setparentwidth.emit("100%");
+    this.Trend();
   }
 
   ngOnChanges()
   {
-
-    console.log("this.structure")
-    console.log(this.structure.components[0].trendinformation)
-     console.log("this.structure")
     this.trendYaxis = [];
     if(this.structure)
     {
@@ -66,15 +61,15 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     }
 
     currentItem.name = name
-    currentItem.nameTextStyle = { color: this.theme},
+    currentItem.nameTextStyle = { color: this.ts.theme},
     currentItem.type = 'value',
-    currentItem.axisLabel = {formatter:'{value}', color:this.theme}
+    currentItem.axisLabel = {formatter:'{value}', color:this.ts.theme}
   }
 
   AddYAxisDefaultInformation()
   {
     var currentItem:any = {
-                            axisLabel: {color: this.theme},
+                            axisLabel: {color: this.ts.theme},
                             type: 'value',
                             boundaryGap: [0, 0.05],
                           }
@@ -88,16 +83,16 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
     timemodifier = timemodifier - ((tempDate.getHours() * 60 * 60 * 1000) + (tempDate.getMinutes() * 60 * 1000) + (tempDate.getSeconds()* 1000))
 
-     timemodifier /= 1000
-     timemodifier = Math.trunc(timemodifier)
-     timemodifier *= 1000
+    timemodifier /= 1000;
+    timemodifier = Math.trunc(timemodifier);
+    timemodifier *= 1000;
 
-    return (new Date(timemodifier))
+    return (new Date(timemodifier));
   }
 
   Trend()
   {
-    this.disableChart = false //WDNR_ROSE_RES_OUT01
+    this.disableChart = false 
 
     var sites = {} // []
 
@@ -105,14 +100,14 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     {
       if(sites[item.sitename] == undefined)
       {
-        sites[item.sitename] = {}// sites.push(item.sitename)
+        sites[item.sitename] = {};
 
-        sites[item.sitename].tags = {}
+        sites[item.sitename].tags = {};
       }
 
-      sites[item.sitename].tags[item.tagname] = {}
-      sites[item.sitename].tags[item.tagname].filterscript = item.filterscript
-      sites[item.sitename].tags[item.tagname].result = []
+      sites[item.sitename].tags[item.tagname] = {};
+      sites[item.sitename].tags[item.tagname].filterscript = item.filterscript;
+      sites[item.sitename].tags[item.tagname].result = [];
     }
 
     var requestedendtime = new Date(this.GetMidnightTime(this.endtime).getTime() + (23*60*60*1000))
@@ -131,16 +126,14 @@ export class ChartComponent implements OnChanges,AfterContentInit {
                 if(tagname == item.tagname)
                 {
                   item.data = res[respitem].tags[tagname].result
-                  break
+                  break;
                 }
               }
-              break
+              break;
             }
-            
-  
           }
         }
-        this.disableChart = false
+      this.disableChart = false;
       }
     )
   }
@@ -177,32 +170,35 @@ export class ChartComponent implements OnChanges,AfterContentInit {
         end:100
       }
     ],
-    tooltip: 
-    {
-      backgroundColor: 'white',
-      textStyle:{ color: 'black',},
-      axisPointer: {type: 'cross'},
+    
+    tooltip: {
+      extraCssText: "background-color: var(--form-background-color);",
+      textStyle:{color:"var(--res-level-text-color)"},
       trigger: 'axis',
       position: ['10%', '10%']
     },      
     legend:
     {
       top:'auto',
-      type:'scroll',
-      textStyle: {color:this.theme },
+      type: 'scroll',
+      textStyle: {color:"var(--res-level-text-color)" },
+      },
+      axisPointer: {
+      
     },
-    axisPointer:{},
-    xAxis: 
+    xAxis: [
     {
       type: 'time'  ,
-      axisLabel: {color: this.theme},
-      splitLine: {show: true},
+        splitLine: { show: true },
+        nameTextStyle:{color:"red"}
     },
-    yAxis:
-    [
-    {
-      type:'value'
-    }
+      ],
+   yAxis: [
+        {
+       type: 'value',
+      nameTextStyle:{ color:this.ts.theme}
+            
+        }
     ],
     series: 
     [

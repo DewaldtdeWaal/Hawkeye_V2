@@ -163,6 +163,9 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
 
     this.title = event.pagename
     this.currentpage = event.navpage
+
+
+    this.GetUserData(this.http)
   }
 
    GetPageVariables(http:HttpClient)

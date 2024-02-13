@@ -1,8 +1,8 @@
 
-<mat-sidenav-container  fullscreen>
+<mat-sidenav-container fullscreen>
 
-<mat-toolbar style="background-color: rgb(89 105 128);">
-  <mat-toolbar-row>
+<mat-toolbar style="background-color: rgb(89 105 128); position: fixed; height: 5%;">
+  <mat-toolbar-row style="position: fixed;">
     
     <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
 
@@ -22,14 +22,15 @@
 </mat-toolbar>
 
 
-        <mat-sidenav  [(opened)]="opened" mode="over"  >
+        <mat-sidenav  [(opened)]="opened"  mode="over" #sidenav position="start"  >
             <ng-container *ngIf="currentpage == 'mainpage' && this.links.length > 0">
-                <app-main-page  [heirarchy]="pageheirarchy" [links]="this.links" (pagechanged)="changepages($event)"></app-main-page>
+                <app-main-page  [heirarchy]="pageheirarchy" [links]="this.links" (pagechanged)="changepages($event); sidenav.toggle()"></app-main-page>
             </ng-container >
             <ng-container *ngIf="currentpage == 'site'">
                 <app-dynamic-site-page [structure]="sitestructure"></app-dynamic-site-page>
             </ng-container > 
-        </mat-sidenav><ng-content>
-            
+        </mat-sidenav>
+
+        <ng-content>    
         </ng-content>
 </mat-sidenav-container>

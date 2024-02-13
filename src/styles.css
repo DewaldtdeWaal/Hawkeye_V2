@@ -130,19 +130,16 @@ p
 
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-
-/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;background-color: #9c2020; }
 
 
 
 
-body {
+:root {
 
-        height: 100%;
-            width: 100%;
+    height: 100%;
+    width: 100%;
     /* --header-account-name-text-color: rgb(235, 0, 0); */
     --page-background-color: rgb(250, 250, 250);
     --mat-toolbar-background-color: rgb(89, 105, 128);
@@ -160,13 +157,9 @@ body {
     --res-level-text-color: rgb(88, 88, 88);
 
     --button-http-request-color: rgb(89, 105, 128);
-
-
     --h1-heading-title: #ffffff;
-
     --toggle-BC: rgb(88, 88, 88);
     --toggle-text-color: rgb(255, 255, 255);
-
     --ps-table-shadadows: rgb(255, 255, 255);
     --ps-table-td-fault-color: rgb(253, 244, 244);
     --ps-table-td-color: rgb(88, 88, 88);
@@ -177,18 +170,14 @@ body {
     --overview-table-color: #ffffff;
     --overview-table-filter-color: rgb(88, 88, 88);
 
-margin: 0;
+    margin: 0;
     color: var(--header-account-name-text-color);
     font-family: 'Rubik', sans-serif !important;
     font-size: 16px !important;
     font-weight: 100 !important;
 }
 
-body.dark-theme {
-
-    
-
-
+[data-theme='dark'] {
     height: 100%;
     width: 100%;
     --page-background-color: rgb(77, 78, 82);
@@ -206,27 +195,19 @@ body.dark-theme {
     --res-level-C2-b-background-color: rgb(89, 105, 128);
     --res-level-fill-background: #2c2e35;
     --res-level-text-color: rgb(255, 255, 255);
-
     --button-http-request-color: rgb(89, 105, 128);
-
     --h1-heading-title: #ffffff;
-
     --toggle-BC: rgb(88, 88, 88);
     --toggle-text-color: rgb(255, 255, 255);
-
     --ps-table-shadadows: rgb(255, 255, 255);
     --ps-table-td-fault-color: #9c2020;
     --ps-table-td-color: rgb(255, 255, 255);
     --ps-table-th-color: rgb(255, 255, 255);
-
-
     --overview-res-table-td: rgb(255, 255, 255);
     --overview-res-table-th: rgb(255, 255, 255);
     --overview-table-color: #2c2e35;
     --overview-table-filter-color: rgb(255, 255, 255);
-
-
-margin: 0;
+    margin: 0;
     color: var(--header-account-name-text-color);
     font-family: 'Rubik', sans-serif !important;
     font-size: 16px !important;

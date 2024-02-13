@@ -1,10 +1,15 @@
 <div class="main-container">
-    <div class="secondary-container">
-        <input [(ngModel)]="starttime" type="date">
-        <input [(ngModel)]="endtime" type="date">
-        <button (click)="Trend()">Trend</button>
+    <div class="outer-container">
+        <div class="inner-container">
+            <input [(ngModel)]="starttime" type="date" />
+
+            <input [(ngModel)]="endtime" type="date" />
+
+            <button  (click)="Trend()">Trend</button>
+        </div>
     </div>
+
     <div class="trend-container">
-        <div *ngIf="!disableChart" echarts [options]="options" class="trend"></div>
+        <div *ngIf="!disableChart" echarts [options]="options" class="chart"></div>
     </div>
 </div>

@@ -1,14 +1,12 @@
 
 <div *ngFor="let node of names.sort()">
     
-        <button mat-button style="width: 90%; border:none; height: 40px;"
-            (click)="structure[node].showchildren = !structure[node].showchildren; " >
+        <button mat-button style="width: 90%; border:none; height: 40px;"(click)="structure[node].showchildren = !structure[node].showchildren; " >
             <b [style.margin-left]="countUp * 5 + '%'">{{node}}</b>
         </button>
 
-    <app-embedded-drop-down [recursionCount]="countUp" [allowchildcheckbox]="allowchildcheckbox"
-        [allowchildren]="allowchildren" *ngIf="structure[node].showchildren" (valuechanged)="ValueChanged()"
-        (childclicked)="ChildClicked($event)" [structure]="structure[node]"></app-embedded-drop-down>
+    <app-embedded-drop-down [recursionCount]="countUp" [allowchildcheckbox]="allowchildcheckbox" [allowchildren]="allowchildren" *ngIf="structure[node].showchildren" (valuechanged)="ValueChanged()"
+    (childclicked)="ChildClicked($event)" [structure]="structure[node]"></app-embedded-drop-down>
 </div>
 <div *ngFor="let item of items.sort()">
     <div class="myrow">
@@ -16,8 +14,7 @@
             <input (input)="ValueChanged()" [(ngModel)]="structure.items[item].enable" type="checkbox">
         </div>
         <button class="child" style="width: 90%; border:none; height: 35px; text-align: center;">
-            <div class="clickable child-text" (click)="  
-            structure.items[item].enable = !structure.items[item].enable; 
+            <div class="clickable child-text" (click)="structure.items[item].enable = !structure.items[item].enable; 
             ValueChanged(); ChildClicked(item)"><b [style.margin-left]="countUp * 5 + 1 + '%'"></b>{{item}}</div>
         </button>
     </div>
