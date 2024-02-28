@@ -1,161 +1,226 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterContentInit, Component, Input } from '@angular/core';
+import { AfterContentInit, Component, Input, ViewChild } from '@angular/core';
 import { CommunicationService } from 'src/app/communication.service';
 import { HeirarchyEditor } from 'src/app/heirarchy-editor.service';
 import { UserAuthenticationService } from 'src/app/user-authentication.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { FormControl } from '@angular/forms';
+import { Observable, startWith,map } from 'rxjs';
+
+//  interface PeriodicElement{
+//   email: string;
+// }
+  
+interface siteElement {
+  Site: string;
+  Customer: string;
+  Position: number
+  selected:boolean
+}
 
 @Component({
   selector: 'app-page-assigner',
   templateUrl: './page-assigner.component.html',
   styleUrls: ['./page-assigner.component.css']
 })
+  
 export class PageAssignerComponent implements AfterContentInit {
 
-  @Input() customers:any = []
-  @Input() pages:any = null
-  heir:any = {}
-  displayheir:any = {}
-
+  @Input() customers: any = [];
+  @Input() pages: any = null;
+  heir: any = {};
+  displayheir: any = {};
   pageassignments:any = null
-  users:any = []
-
-  currentuser:any = ""
+  // users: PeriodicElement[] = [];
+  currentuser: any = "";
   disableuserchange:any = false
   saveable:any = false
+  @ViewChild(MatSort) sort: MatSort;
+  clickedRows = new Set<siteElement>();
 
-  constructor(private heirarchyeditor:HeirarchyEditor,private http:HttpClient, private userauth: UserAuthenticationService, private commservice:CommunicationService)
-  {
-    
+
+  adminArray: string[] = ["Test", "NMBM", "Beyers Naude"];
+  arrayControl = new FormControl(this.adminArray);
+
+  selectedSitesNumber: number[] = [];
+  myControl = new FormControl('')
+  options:string[]=[]
+  filteredOptions: Observable<string[]>;
+
+    ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+onOptionSelected(event: any): void {
+  console.log('Selected option:', event.option.value);
+  // You can now use the selected value as needed in your component
+}
+
+    trackFn(index, item) {
+  console.log("item") 
+  console.log(item)   
+  console.log("item") 
+      
+}
+
+
+
+  constructor(private heirarchyeditor: HeirarchyEditor, private http: HttpClient, private userauth: UserAuthenticationService, private commservice: CommunicationService ) {
+  }
+
+
+
+    private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
   ngAfterContentInit(): void {
-    this.GetUserData()
+    this.GetUserData();
 
-    this.SetStructure()
+    this.SetStructure();
 
-    this.displayheir = this.heir
+    this.displayheir = this.heir;
   }
 
-  async GetUserData()
+  displayedColumns: string[] = ['select','email',];
+  SITE_DATA: siteElement[] = [];
+  dataSource: any;
+
+
+siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
+
+  filterValue: any = "";
+
+
+  displaySiteName = ['select', 'Site', 'Customer']
+  
+
+  currentEmailSelected: string;
+   GetUserData()
   {
-    const message = {requesttype: "get page assignments", customers:this.customers}
+    const message = { requesttype: "get page assignments", customers: this.customers };
     this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
     {
+
       this.pageassignments = res
-      this.users = []
-      for(var user of this.pageassignments)
-      {
-        this.users.push(user.email)
+
+      for (let i = 0; i < this.pageassignments.length; i++) {
+       this.options[i] = this.pageassignments[i].email  
       }
     })
   }
 
+
+ displayTableBasedOnDropDown($event: any) {
+
+  let index = 0;
+  let userPages:number[] = [];
+  for (let i = 0; i < this.pageassignments.length; i++){
+    if(this.currentEmailSelected == this.pageassignments[i].email){
+      userPages = this.pageassignments[i].pages[$event];
+    }
+  }
+
+  if ($event === undefined) {
+    for (let i = 0; i < this.pages.length; i++) {
+      this.SITE_DATA[i] = {
+        Site: this.pages[i].pageName,
+        Customer: this.pages[i].customer,
+        Position: this.pages[i].id,
+        selected: false,
+      };
+    }
+  }
+  else {
+      for (let i = 0; i < this.pages.length; i++) {
+      if (this.pages[i].customer == $event) {
+        if (userPages.includes(this.pages[i].id)) {
+          this.SITE_DATA[index] = {
+          Site: this.pages[i].pageName,
+          Customer: this.pages[i].customer,
+          Position: this.pages[i].id,
+          selected: true,
+          };
+        }
+        else
+        {
+          this.SITE_DATA[index] = {
+          Site: this.pages[i].pageName,
+          Customer: this.pages[i].customer,
+          Position: this.pages[i].id,
+          selected: false,
+          };
+        }
+             
+        index++;
+      }
+    }
+  }
+
+  this.siteDataSource.data = this.SITE_DATA;
+  this.siteDataSource.sort = this.sort;
+  this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+  this.SITE_DATA = [];
+  userPages = [];
+}
+
+
+  selection = new SelectionModel<any>(false, []);
+  siteSelection = new SelectionModel<any>(true, []);
+  
+  row: any;
+  onRadioChange(row: any) {
+    this.selection.clear();
+    
+    this.selection.select(row);
+
+    console.log(row)
+
+    this.currentEmailSelected = row.email;
+    console.log(this.currentEmailSelected)
+
+    this.displayTableBasedOnDropDown(row);
+
+    this.row = row
+
+    this.SetStructure()
+
+  }
+
+  
+
   SetStructure()
   {
-    this.heir = this.heirarchyeditor.GetStructure(this.pages)
+    this.heir = this.heirarchyeditor.GetStructure(this.pages);
   }
-
-  UpdateSiteSelections(updateItemName)
-  {
-    this.currentuser = updateItemName
-    for(var user of this.pageassignments)
-    {
-      if(user.email == updateItemName)
-      {
-        
-        this.SetStructure()
-
-        this.heirarchyeditor.SelectNavigationChildren(this.heir,user.pages)
-        var toremove:any = []
-        for(var site in this.heir)
-        {
-          var found = false
-          for(var x in user.pages)
-          {
-            if(site == x)
-            {
-              found = true
-            }
-          }
-
-          if(!found && site != "showchildren" && site != "enable")
-          {
-            toremove.push(site)
-          }
-        }
-
-        for(var item of toremove)
-        {
-          delete this.heir[item]
-        }
-
-        this.displayheir = this.heir
-        break
-      }
-    }
-  }
-
-  UpdateUser()
-  {
-    var out = {}
-     this.heirarchyeditor.BuildUserPages(this.displayheir,out)
-
-    for(var cust of this.customers)
-    {
-      var exists = false 
-
-      for(var omer in out)
-      {
-        if(cust == omer)
-        {
-          exists = true
-          break
-        }
-      }
-      if(!exists)
-      {
-        out[cust] = []
-      }
-    }
-    
-    for(var user of this.pageassignments)
-    {
-      if(user.email == this.currentuser)
-      {
-
-        for(var customer in out)
-        {
-          if(user.pages[customer])
-          {
-            user.pages[customer] = out[customer]
-          }
-        }
-
-        var userList = []
-        userList.push(user)
-
-        const message = {requesttype: "set page assignments", user:this.userauth.email ,assignments:userList}
-        this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
-        {
-          this.disableuserchange = false
-          this.currentuser = ""
-        })
-
-        break;
-      }
-    }
-
-  }
+ 
 
   HeirarchyValueChanged()
   {
     if(this.currentuser != "")
     {
-      this.disableuserchange = true
-      this.saveable = false
+      this.disableuserchange = true;
+      this.saveable = false;
     }
+  }
+
+
+
+
+  applyFilter(event: Event) {
+  this.filterValue = (event.target as HTMLInputElement).value;
+ this.dataSource.filter = this.filterValue.trim().toLowerCase();
   }
   
 
-
+    applyFilter2(event: Event) {
+  this.filterValue = (event.target as HTMLInputElement).value;
+ this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+}
 }

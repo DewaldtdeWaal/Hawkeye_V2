@@ -33,7 +33,10 @@ export class HeaderComponent {
   opened=false;
   @Output() messageEvent = new EventEmitter<string>()
 
-  pageTitle:any = "Home"
+  pageTitle: any = "Home";
+  
+
+  
   constructor(public head:header,private http: HttpClient, private userauth:UserAuthenticationService, private router: Router, private siteStorage:SiteStorageService,private commservice:CommunicationService, private heirarchyservice:HeirarchyEditor,  @Inject(DOCUMENT) private document: Document,private dataBaseTheme:Theme,private themeService:ThemeService )
   {
 

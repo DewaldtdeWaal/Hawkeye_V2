@@ -61,6 +61,13 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+
 
 @NgModule({
   declarations: [
@@ -112,6 +119,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 
   ],
   imports: [
+    MatTableModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -124,7 +132,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     MatMenuModule,
     MatCardModule,
     MatFormFieldModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [UserAuthenticationService, HeirarchyEditor,CommunicationService, RouteGuard, SiteStorageService,{provide: HTTP_INTERCEPTORS,useClass: HeaderInterceptor, multi:true},provideEcharts()],
   bootstrap: [AppComponent]

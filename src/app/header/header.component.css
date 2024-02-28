@@ -8,3 +8,7 @@ mat-sidenav{
     background-color: var(--form-background-color) !important;
     color: var(--res-level-text-color)
 }
+
+.mat-drawer-backdrop{
+    background-color: rgba(216, 0, 0, 0.5);
+}

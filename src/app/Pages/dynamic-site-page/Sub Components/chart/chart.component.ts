@@ -92,6 +92,8 @@ export class ChartComponent implements OnChanges,AfterContentInit {
 
   Trend()
   {
+
+  
     this.disableChart = false 
 
     var sites = {} // []
@@ -138,13 +140,10 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     )
   }
 
-
-
   options: EChartsOption = 
   { 
     grid: 
     {
-
       containLabel: true
     },
     toolbox:
@@ -175,7 +174,8 @@ export class ChartComponent implements OnChanges,AfterContentInit {
       extraCssText: "background-color: var(--form-background-color);",
       textStyle:{color:"var(--res-level-text-color)"},
       trigger: 'axis',
-      position: ['10%', '10%']
+      position: ['10%', '10%'],
+      axisPointer:{type:'cross'}
     },      
     legend:
     {
@@ -183,21 +183,17 @@ export class ChartComponent implements OnChanges,AfterContentInit {
       type: 'scroll',
       textStyle: {color:"var(--res-level-text-color)" },
       },
-      axisPointer: {
-      
-    },
-    xAxis: [
-    {
-      type: 'time'  ,
-        splitLine: { show: true },
-        nameTextStyle:{color:"red"}
+      xAxis: [
+        {
+          type: 'time',
+          splitLine: { show: true },
+          axisLabel:{ color : ThemeService.getTheme() }
     },
       ],
    yAxis: [
         {
        type: 'value',
-      nameTextStyle:{ color:this.ts.theme}
-            
+      nameTextStyle: { color: 'red' }
         }
     ],
     series: 

@@ -1,14 +1,66 @@
-<div class="main-container">
-    <div class="split">
-        <div class="split">
-            <p>{{currentuser}}</p>
-            <app-list-box [disabled]="disableuserchange" (itemselected)="UpdateSiteSelections($event)" [enablefilter]="false" [items]="users"></app-list-box>
-            <button *ngIf="disableuserchange" class="nogrow" (click)="UpdateUser()">Update User</button>
-            <!-- <button *ngIf="saveable" class="nogrow" (click)="SaveUsers()">Save Changes</button> -->
+<div class="mainContainer" style="overflow-x: hidden;">
+<div class="container1"style="overflow-x: hidden;">
+<form class="example-form">
+    <mat-form-field class="example-full-width; overflow: hidden;">
+        <mat-label>E-mail</mat-label>
+        <input type="text" placeholder="Pick One" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto" (optionSelected)="onOptionSelected($event)">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async; trackBy: trackFn" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>
+
+</div>
+
+<div class="container2">
+    <div class="subContainer">
+        <div class="container21">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter2($event)" placeholder="Search">
+            </mat-form-field>
         </div>
-        <div class="heirarchy">
-            <app-embedded-drop-down  [allowchildcheckbox]="true" (valuechanged)="HeirarchyValueChanged()" [structure]="heir" ></app-embedded-drop-down> 
-        </div>
+
+<!-- I want this thing to work live. Every time I make a click it must reload the thing -->
+    <div class="container22">
+        <mat-form-field>
+            <mat-select name="var" [(ngModel)]="arrayControl" placeholder="Field"
+                (ngModelChange)="displayTableBasedOnDropDown($event)">
+            <mat-option *ngFor="let admin of adminArray" [value]="admin">
+                {{admin}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     </div>
 </div>
 
+<table mat-table [dataSource]="siteDataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="select">
+        <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Select</th>
+        <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let row">
+        <mat-checkbox 
+        (click)="$event.stopPropagation()" 
+        (change)="$event ? siteSelection.toggle(row) : null"
+        [checked]= row.selected  >
+        </mat-checkbox>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Site">
+    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Site Name</th>
+    <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let element">{{element.Site}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Customer">
+    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Customer</th>
+    <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let element">{{element.Customer}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displaySiteName; sticky: true"></tr>
+    <tr mat-row (click)="clickedRows.add(row)" *matRowDef="let row; columns:displaySiteName;"></tr>
+    </table>
+    </div>
+</div>

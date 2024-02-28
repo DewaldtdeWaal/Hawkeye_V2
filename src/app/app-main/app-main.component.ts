@@ -142,7 +142,6 @@ export class AppMainComponent implements OnDestroy, AfterContentInit {
     var event = $event
     for(var i = 0;i < this.userdata.pages.length; i++)
     {
-      console.log(this.userdata); console.log("this.userdata"); console.log("this.userdata")
       if(this.userdata.pages[i].pageName == event.pagename)
       {
         this.sitestructure = this.userdata.pages[i]

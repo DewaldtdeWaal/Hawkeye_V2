@@ -1,14 +1,11 @@
+<mat-sidenav-container fullscreen style=" position: absolute; ">
 
-<mat-sidenav-container fullscreen>
-
-<mat-toolbar style="background-color: rgb(89 105 128); position: fixed; height: 5%;">
+<mat-toolbar style="background-color: rgb(89 105 128); position: fixed; height: 50px;" >
   <mat-toolbar-row style="position: fixed;">
     
-    <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
-
-    <!-- Centered h1 element -->
+    <button style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important;overflow: hidden;" (click)="opened=!opened;head.showSub=false;TakeMeHome()"><mat-icon style="vertical-align: middle;">menu</mat-icon></button>
+   
     <div style="margin-left: auto; color: rgb(255, 255, 255);" >{{pageTitle}}</div>
-
 
     <button mat-button [matMenuTriggerFor]="User" color="color: rgb(255, 255, 255);background-color: rgb(89 105 128); accent" style="color: rgb(255, 255, 255);background-color: rgb(89 105 128);  border: none !important; margin-left: auto;"><mat-icon style="vertical-align: middle;">account_circle</mat-icon></button>
     <mat-menu #User="matMenu" class="customize">
@@ -26,7 +23,7 @@
             <ng-container *ngIf="currentpage == 'mainpage' && this.links.length > 0">
                 <app-main-page  [heirarchy]="pageheirarchy" [links]="this.links" (pagechanged)="changepages($event); sidenav.toggle()"></app-main-page>
             </ng-container >
-            <ng-container *ngIf="currentpage == 'site'">
+            <ng-container *ngIf="currentpage == 'site'" >
                 <app-dynamic-site-page [structure]="sitestructure"></app-dynamic-site-page>
             </ng-container > 
         </mat-sidenav>
