@@ -14,6 +14,8 @@ export class AppComponent
   ngOnInit() {
     document.documentElement.setAttribute('data-theme', this.themeService.getCurrentTheme());
   }
+
+  changepage($event: any) { }
 }
 
 

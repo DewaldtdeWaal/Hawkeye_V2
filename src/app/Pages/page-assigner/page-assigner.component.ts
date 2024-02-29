@@ -6,13 +6,10 @@ import { UserAuthenticationService } from 'src/app/user-authentication.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { Observable, startWith,map } from 'rxjs';
+import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
-//  interface PeriodicElement{
-//   email: string;
-// }
-  
 interface siteElement {
   Site: string;
   Customer: string;
@@ -33,38 +30,42 @@ export class PageAssignerComponent implements AfterContentInit {
   heir: any = {};
   displayheir: any = {};
   pageassignments:any = null
-  // users: PeriodicElement[] = [];
   currentuser: any = "";
   disableuserchange:any = false
   saveable:any = false
   @ViewChild(MatSort) sort: MatSort;
   clickedRows = new Set<siteElement>();
-
-
   adminArray: string[] = ["Test", "NMBM", "Beyers Naude"];
   arrayControl = new FormControl(this.adminArray);
-
   selectedSitesNumber: number[] = [];
   myControl = new FormControl('')
   options:string[]=[]
   filteredOptions: Observable<string[]>;
+  selectedValue: any
+    
+ ngOnInit() {
+  this.filteredOptions = this.myControl.valueChanges.pipe(
+    startWith(''),
+    map(value => this._filter(value || ''))
+  );
 
-    ngOnInit() {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
   }
+  
 onOptionSelected(event: any): void {
-  console.log('Selected option:', event.option.value);
-  // You can now use the selected value as needed in your component
-}
+  console.log(event)
+  // Additional actions with the selected value can be done here
+  }
+  
 
-    trackFn(index, item) {
-  console.log("item") 
-  console.log(item)   
-  console.log("item") 
-      
+
+trackFn(index, item) {
+
+  console.log("this.currentEmailSelected")
+
+  this.currentEmailSelected = item;
+  
+  console.log(this.currentEmailSelected)
+  console.log("this.currentEmailSelected")
 }
 
 
@@ -72,10 +73,8 @@ onOptionSelected(event: any): void {
   constructor(private heirarchyeditor: HeirarchyEditor, private http: HttpClient, private userauth: UserAuthenticationService, private commservice: CommunicationService ) {
   }
 
-
-
-    private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private _filter(value: string): string[] {
+  const filterValue = value.toLowerCase();
 
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
@@ -91,11 +90,12 @@ onOptionSelected(event: any): void {
   displayedColumns: string[] = ['select','email',];
   SITE_DATA: siteElement[] = [];
   dataSource: any;
-
-
-siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
-
+  siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
+  siteSelection = new SelectionModel<any>(true, []);
   filterValue: any = "";
+
+  
+  email : string;
 
 
   displaySiteName = ['select', 'Site', 'Customer']
@@ -117,7 +117,9 @@ siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
   }
 
 
- displayTableBasedOnDropDown($event: any) {
+  displayTableBasedOnDropDown($event: any) {
+   
+    console.log(this.currentEmailSelected)
 
   let index = 0;
   let userPages:number[] = [];
@@ -125,7 +127,9 @@ siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
     if(this.currentEmailSelected == this.pageassignments[i].email){
       userPages = this.pageassignments[i].pages[$event];
     }
-  }
+   }
+   
+   console.log(userPages)
 
   if ($event === undefined) {
     for (let i = 0; i < this.pages.length; i++) {
@@ -170,31 +174,8 @@ siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
   userPages = [];
 }
 
-
-  selection = new SelectionModel<any>(false, []);
-  siteSelection = new SelectionModel<any>(true, []);
   
-  row: any;
-  onRadioChange(row: any) {
-    this.selection.clear();
-    
-    this.selection.select(row);
-
-    console.log(row)
-
-    this.currentEmailSelected = row.email;
-    console.log(this.currentEmailSelected)
-
-    this.displayTableBasedOnDropDown(row);
-
-    this.row = row
-
-    this.SetStructure()
-
-  }
-
   
-
   SetStructure()
   {
     this.heir = this.heirarchyeditor.GetStructure(this.pages);
@@ -210,17 +191,66 @@ siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
     }
   }
 
-
-
-
-  applyFilter(event: Event) {
+applyFilter(event: Event) {
   this.filterValue = (event.target as HTMLInputElement).value;
  this.dataSource.filter = this.filterValue.trim().toLowerCase();
   }
   
 
-    applyFilter2(event: Event) {
+applyFilter2(event: Event) {
   this.filterValue = (event.target as HTMLInputElement).value;
  this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
-}
+  }
+
+
+      public countries = [
+    {
+      id: 1,
+      name: 'Albania',
+    },
+    {
+      id: 2,
+      name: 'Belgium',
+    },
+    {
+      id: 3,
+      name: 'Denmark',
+    },
+    {
+      id: 4,
+      name: 'Montenegro',
+    },
+    {
+      id: 5,
+      name: 'Turkey',
+    },
+    {
+      id: 6,
+      name: 'Ukraine',
+    },
+    {
+      id: 7,
+      name: 'Macedonia',
+    },
+    {
+      id: 8,
+      name: 'Slovenia',
+    },
+    {
+      id: 9,
+      name: 'Georgia',
+    },
+    {
+      id: 10,
+      name: 'India',
+    },
+    {
+      id: 11,
+      name: 'Russia',
+    },
+    {
+      id: 12,
+      name: 'Switzerland',
+    }
+  ];
 }

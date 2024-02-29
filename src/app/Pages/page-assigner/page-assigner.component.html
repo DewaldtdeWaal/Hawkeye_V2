@@ -1,17 +1,22 @@
 <div class="mainContainer" style="overflow-x: hidden;">
 <div class="container1"style="overflow-x: hidden;">
-<form class="example-form">
-    <mat-form-field class="example-full-width; overflow: hidden;">
+<!-- <form class="example-form">
+    <mat-form-field class="example-full-width;" style="overflow: hidden;">
         <mat-label>E-mail</mat-label>
-        <input type="text" placeholder="Pick One" aria-label="Number" matInput [formControl]="myControl"
-            [matAutocomplete]="auto" (optionSelected)="onOptionSelected($event)">
+        <input type="text" placeholder="E-mail" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto" (onClick)="onOptionSelected($event)">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let option of filteredOptions | async; trackBy: trackFn" [value]="option">
                 {{option}}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>
-</form>
+
+
+    
+</form> -->
+
+<!-- <ng-autocomplete></ng-autocomplete> -->
 
 </div>
 
