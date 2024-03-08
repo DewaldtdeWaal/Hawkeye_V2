@@ -1,85 +1,99 @@
 .mainContainer{
     padding-top: 70px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 80%;
+    grid-template-columns: 1fr ;
+    max-width: 1170px;
     min-width: none;
     margin: auto;
-    overflow: hidden;
+    overflow: visible;
+    min-height: 440px;
+
+    
+
 }
 
 .container1{
-    position: relative;
+   display:  grid;
     margin: 0 auto;
     grid-column: 1;
+    grid-row: 1;
     width: 90%;
+    height: 180px;
+    
 }
 
 .container2 {
-    position: relative;
-    grid-column: 2;
-    width: 90%;
+    display: grid;
+    grid-column: 1;
+    width: 100%;
+    grid-row: 2;
+    
 }
 
 .subContainer {
     display: grid;
+   vertical-align: auto;
 
+}
+
+.searchContainers{
+    display: grid;
+    vertical-align: auto;
 }
 
 .container21{
+    display: grid;
     position: relative;
+    margin: auto;
     grid-column: 1;
-    width: 90%;
-    margin-left: 0;
+    width: 50%;
 }
 .container22 {
+    display: grid;
     position: relative;
+    margin: auto;
     grid-column: 2;
-    width: 90%;
-    margin-right: 100;
+    width: 50%;
 }
 
-::ng-deep .mat-mdc-radio-button.mat-accent{
-    --mdc-radio-unselected-hover-icon-color:var(--form-text-color);
-    --mdc-radio-selected-icon-color:var(--form-text-color);
-    --mat-mdc-radio-ripple-color:var(--form-text-color);
-    --mat-mdc-radio-checked-ripple-color:var(--form-text-color);
-}
 
-::ng-deep.mat-mdc-radio-button.mat-accent{
-    --mdc-radio-unselected-focus-icon-color:var(--form-text-color);
-    --mdc-radio-unselected-hover-icon-color:var(--form-text-color);
-    --mdc-radio-unselected-icon-color:var(--form-text-color);
-    --mdc-radio-unselected-pressed-icon-color:var(--form-text-color);
-    --mdc-radio-selected-focus-icon-color:var(--form-text-color);
-    --mdc-radio-selected-hover-icon-color:var(--form-text-color);
-    --mdc-radio-selected-icon-color:var(--form-text-color);
-    --mdc-radio-selected-pressed-icon-color:var(--form-text-color);
-    --mdc-mdc-radio-ripple-color:var(--form-text-color);
-    --mdc-mdc-radio-checked-ripple-color:var(--form-text-color);
-}
+
 
 ::ng-deep .mat-mdc-checkbox.mat-accent {
-    --mdc-checkbox-selected-checkmark-color: var(--form-text-color);
-    --mdc-checkbox-selected-focus-icon-color:white;
-    --mdc-checkbox-selected-hover-icon-color:var(--form-text-color);
-    --mdc-checkbox-selected-icon-color:white;
-    --mdc-checkbox-selected-pressed-icon-color:white;
-    --mdc-checkbox-unselected-focus-icon-color:var(--form-text-color);
-    --mdc-checkbox-unselected-hover-icon-color:var(--form-text-color);
-    --mdc-checkbox-disabled-selected-icon-color:var(--form-text-color);
-    --mdc-checkbox-disabled-unselected-icon-color:var(--form-text-color);
-    --mdc-checkbox-unselected-icon-color:var(--form-text-color);
+   
+    --mdc-checkbox-selected-focus-icon-color:black;
+    --mdc-checkbox-selected-hover-icon-color:black;
+    --mdc-checkbox-selected-pressed-icon-color:black;
+    --mdc-checkbox-unselected-focus-icon-color:black;
+    --mdc-checkbox-unselected-hover-icon-color:black;
+    --mdc-checkbox-disabled-selected-icon-color:black;
+    --mdc-checkbox-disabled-unselected-icon-color:black;
+    --mdc-checkbox-unselected-icon-color:black;
+
+    /* This is the edge of the checkbox when you click on it */
     --mdc-checkbox-unselected-pressed-icon-color:var(--form-text-color);
+
+    /* This is the color of the check when the checkbox was selected */
+    --mdc-checkbox-selected-checkmark-color: var(--form-text-color);
+
+    /* This is the background of the checkbox when it was selected */
+    --mdc-checkbox-selected-icon-color: black;
+
+    /* var(--form-text-color) */
 }
 
-.example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-    overflow: hidden;
-}
+
+
 
 .example-full-width {
     width: 100%;
 }
+
+
+.ng-autocomplete {
+    width: 100%;
+    max-width: 600px;
+    display: table;
+    margin: 0 auto;
+}
+

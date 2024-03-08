@@ -7,14 +7,19 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, NgForm } from '@angular/forms';
-import { Observable, startWith,map } from 'rxjs';
+import { Observable, startWith,map, of } from 'rxjs';
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-
+import { MatPaginator } from '@angular/material/paginator';
 interface siteElement {
   Site: string;
   Customer: string;
   Position: number
   selected:boolean
+}
+
+interface option{
+  name: any;
+  id:number
 }
 
 @Component({
@@ -25,6 +30,7 @@ interface siteElement {
   
 export class PageAssignerComponent implements AfterContentInit {
 
+
   @Input() customers: any = [];
   @Input() pages: any = null;
   heir: any = {};
@@ -33,51 +39,44 @@ export class PageAssignerComponent implements AfterContentInit {
   currentuser: any = "";
   disableuserchange:any = false
   saveable:any = false
-  @ViewChild(MatSort) sort: MatSort;
+   @ViewChild(MatSort) sort: MatSort;
+
   clickedRows = new Set<siteElement>();
   adminArray: string[] = ["Test", "NMBM", "Beyers Naude"];
   arrayControl = new FormControl(this.adminArray);
   selectedSitesNumber: number[] = [];
   myControl = new FormControl('')
-  options:string[]=[]
+  options:option[]=[]
   filteredOptions: Observable<string[]>;
-  selectedValue: any
+  selectedValue: any;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  
     
- ngOnInit() {
-  this.filteredOptions = this.myControl.valueChanges.pipe(
-    startWith(''),
-    map(value => this._filter(value || ''))
-  );
+  ngOnInit() {
 
   }
   
-onOptionSelected(event: any): void {
-  console.log(event)
-  // Additional actions with the selected value can be done here
-  }
+  onOptionSelected(event: any): void {
+  
+}
   
 
+  changeSelectedValue(newValue: any) {
+    this.arrayControl = newValue;
+}
 
 trackFn(index, item) {
 
-  console.log("this.currentEmailSelected")
-
   this.currentEmailSelected = item;
   
-  console.log(this.currentEmailSelected)
-  console.log("this.currentEmailSelected")
-}
 
+}
 
 
   constructor(private heirarchyeditor: HeirarchyEditor, private http: HttpClient, private userauth: UserAuthenticationService, private commservice: CommunicationService ) {
   }
 
-  private _filter(value: string): string[] {
-  const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
 
   ngAfterContentInit(): void {
     this.GetUserData();
@@ -87,7 +86,7 @@ trackFn(index, item) {
     this.displayheir = this.heir;
   }
 
-  displayedColumns: string[] = ['select','email',];
+
   SITE_DATA: siteElement[] = [];
   dataSource: any;
   siteDataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -102,6 +101,13 @@ trackFn(index, item) {
   
 
   currentEmailSelected: string;
+
+
+    
+
+
+  
+
    GetUserData()
   {
     const message = { requesttype: "get page assignments", customers: this.customers };
@@ -111,39 +117,93 @@ trackFn(index, item) {
       this.pageassignments = res
 
       for (let i = 0; i < this.pageassignments.length; i++) {
-       this.options[i] = this.pageassignments[i].email  
+        this.options[i] = {
+          name: this.pageassignments[i].email,
+          id:i+1
+        }
       }
+      this.sortEmail();
     })
+     
+     
   }
 
+  onAddAllCheckboxChange(row:siteElement){
+    
+  }
 
+  onCheckboxChange(row: siteElement) {
+    this.addOrRemoveSite(row.Position);
+  }
+
+  dropDownValue: any;
   displayTableBasedOnDropDown($event: any) {
-   
-    console.log(this.currentEmailSelected)
 
+    console.log(this.pageassignments)
+   
+
+
+    this.dropDownValue = $event;
+  this.renderTable()
+  }
+
+addOrRemoveSite(row: any) {
+  console.log(row);
+  let addOrNot = false;
+  for (let i = 0; i < this.pageassignments.length; i++) {
+    if (this.pageassignments[i].email == this.currentEmailSelected) {
+      let myArray = this.pageassignments[i].pages[this.dropDownValue];
+
+      if (myArray) {
+        for (let j = 0; j < myArray.length; j++) {
+          if (row == myArray[j]) {
+            console.log(myArray);
+            addOrNot = true;
+            myArray.splice(j, 1);
+            console.log(myArray);
+            break; 
+          }
+        }
+
+        if (!addOrNot) {
+          myArray.push(row);
+        }
+
+        this.pageassignments[i].pages[this.dropDownValue] = myArray;
+      } else {
+        this.pageassignments[i].pages[this.dropDownValue] = [row];
+      }
+
+      break; 
+    }
+  }
+}
+
+  renderTable() {
   let index = 0;
-  let userPages:number[] = [];
+    let userPages: any[] = [];
+    
+
+
   for (let i = 0; i < this.pageassignments.length; i++){
-    if(this.currentEmailSelected == this.pageassignments[i].email){
-      userPages = this.pageassignments[i].pages[$event];
+    if (this.currentEmailSelected == this.pageassignments[i].email) {
+
+      if (this.pageassignments[i].pages[this.dropDownValue] == undefined) {
+        userPages = [];
+      }
+      else {
+        userPages = this.pageassignments[i].pages[this.dropDownValue];
+      }
     }
    }
    
-   console.log(userPages)
-
-  if ($event === undefined) {
-    for (let i = 0; i < this.pages.length; i++) {
-      this.SITE_DATA[i] = {
-        Site: this.pages[i].pageName,
-        Customer: this.pages[i].customer,
-        Position: this.pages[i].id,
-        selected: false,
-      };
-    }
+    if (this.dropDownValue === undefined || userPages == undefined) {
+      this.SITE_DATA = null;
   }
-  else {
+  else
+  {
       for (let i = 0; i < this.pages.length; i++) {
-      if (this.pages[i].customer == $event) {
+      if (this.pages[i].customer == this.dropDownValue) {
         if (userPages.includes(this.pages[i].id)) {
           this.SITE_DATA[index] = {
           Site: this.pages[i].pageName,
@@ -165,15 +225,56 @@ trackFn(index, item) {
         index++;
       }
     }
-  }
+    }
+    
+    this.sortSite()
 
   this.siteDataSource.data = this.SITE_DATA;
   this.siteDataSource.sort = this.sort;
-  this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+    this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+    this.siteDataSource.paginator = this.paginator;
   this.SITE_DATA = [];
   userPages = [];
-}
+  }
 
+  sortEmail() {
+    this.options.sort((a, b) => {
+  // Convert both 'Site' properties to lowercase for case-insensitive sorting
+  const siteA = a.name.toLowerCase();
+  const siteB = b.name.toLowerCase();
+
+  // Compare the 'Site' properties
+  if (siteA < siteB) {
+    return -1;
+  }
+  if (siteA > siteB) {
+    return 1;
+  }
+  // 'Site' properties are equal
+  return 0;
+});
+  }
+
+  sortSite() {
+    // Assuming SITE_DATA is an array of objects with 'Site' property
+    if(this.SITE_DATA != null){
+this.SITE_DATA.sort((a, b) => {
+  // Convert both 'Site' properties to lowercase for case-insensitive sorting
+  const siteA = a.Site.toLowerCase();
+  const siteB = b.Site.toLowerCase();
+
+  // Compare the 'Site' properties
+  if (siteA < siteB) {
+    return -1;
+  }
+  if (siteA > siteB) {
+    return 1;
+  }
+  // 'Site' properties are equal
+  return 0;
+});
+}
+  }
   
   
   SetStructure()
@@ -203,54 +304,76 @@ applyFilter2(event: Event) {
   }
 
 
-      public countries = [
+
+
+      selectEvent(item) {
+        this.renderTable();
+
+        this.currentEmailSelected = item.name;
+
+
+        this.changeSelectedValue(null);
+
+  this.siteDataSource.data = [];
+  this.siteDataSource.sort = this.sort;
+        this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+        this.siteDataSource.paginator = this.paginator;
+  }
+
+  onChangeSearch(search: string) {
+
+  }
+
+  onFocused(e) {
+  }
+
+
+
+
+
+
+   menuItems$ = of([
     {
-      id: 1,
-      name: 'Albania',
+      title: 'Test',
+      children: [
+        {
+          title: 'Test1',
+          children: [
+            {
+              title: 'Test1.1',
+              children: [
+                {
+                  title: 'Test1.1.1',
+                  route: '/',
+                },
+                {
+                  title: 'Test1.1.2',
+                  route: '/',
+                },
+              ],
+            },
+            {
+              title: 'Test1.2',
+              route: '/',
+            },
+          ],
+        },
+        {
+          title: 'Test2',
+          children: [
+            {
+              title: 'Test2.1',
+              route: '/',
+            },
+          ],
+        },
+        {
+          title: 'Test3',
+          route: '/',
+        },
+      ],
     },
-    {
-      id: 2,
-      name: 'Belgium',
-    },
-    {
-      id: 3,
-      name: 'Denmark',
-    },
-    {
-      id: 4,
-      name: 'Montenegro',
-    },
-    {
-      id: 5,
-      name: 'Turkey',
-    },
-    {
-      id: 6,
-      name: 'Ukraine',
-    },
-    {
-      id: 7,
-      name: 'Macedonia',
-    },
-    {
-      id: 8,
-      name: 'Slovenia',
-    },
-    {
-      id: 9,
-      name: 'Georgia',
-    },
-    {
-      id: 10,
-      name: 'India',
-    },
-    {
-      id: 11,
-      name: 'Russia',
-    },
-    {
-      id: 12,
-      name: 'Switzerland',
-    }
-  ];
+    { title: 'A', route: '/a' },
+    { title: 'B', route: '/b' },
+  ]);
 }

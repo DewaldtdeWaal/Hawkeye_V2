@@ -1,23 +1,29 @@
-<div class="mainContainer" style="overflow-x: hidden;">
-<div class="container1"style="overflow-x: hidden;">
-<!-- <form class="example-form">
-    <mat-form-field class="example-full-width;" style="overflow: hidden;">
-        <mat-label>E-mail</mat-label>
-        <input type="text" placeholder="E-mail" aria-label="Number" matInput [formControl]="myControl"
-            [matAutocomplete]="auto" (onClick)="onOptionSelected($event)">
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async; trackBy: trackFn" [value]="option">
-                {{option}}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
+<div class="mainContainer" >
+<div class="container1">
 
-
+<!-- npm i angular-ng-autocomplete -->
+<div class="ng-autocomplete">
     
-</form> -->
+<ng-autocomplete
+[data]="options"
+[searchKeyword]="'name'"
+placeholder="Enter the Client E-mail"
+(selected)='selectEvent($event)'
+(inputChanged)='onChangeSearch($event)'
+(inputFocused)='onFocused($event)'
+[itemTemplate]="itemTemplate"
+[notFoundTemplate]="notFoundTemplate">
+</ng-autocomplete>
 
-<!-- <ng-autocomplete></ng-autocomplete> -->
+<ng-template #itemTemplate let-item>
+    <a [innerHTML]="item.name"></a>
+</ng-template>
 
+<ng-template #notFoundTemplate let-notFound>
+    <div [innerHTML]="notFound"></div>
+</ng-template>
+
+</div>
 </div>
 
 <div class="container2">
@@ -41,31 +47,81 @@
     </div>
 </div>
 
-<table mat-table [dataSource]="siteDataSource" class="mat-elevation-z8">
+<button mat-button [matMenuTriggerFor]="animals">Animal index</button>
+<mat-menu #animals="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button>
+    <button mat-menu-item [matMenuTriggerFor]="invertebrates">Invertebrates</button>
+</mat-menu>
+
+<mat-menu #vertebrates="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="fish">Fishes</button>
+    <button mat-menu-item [matMenuTriggerFor]="amphibians">Amphibians</button>
+    <button mat-menu-item [matMenuTriggerFor]="reptiles">Reptiles</button>
+    <button mat-menu-item>Birds</button>
+    <button mat-menu-item>Mammals</button>
+</mat-menu>
+
+<mat-menu #invertebrates="matMenu">
+    <button mat-menu-item>Insects</button>
+    <button mat-menu-item>Molluscs</button>
+    <button mat-menu-item>Crustaceans</button>
+    <button mat-menu-item>Corals</button>
+    <button mat-menu-item>Arachnids</button>
+    <button mat-menu-item>Velvet worms</button>
+    <button mat-menu-item>Horseshoe crabs</button>
+</mat-menu>
+
+<mat-menu #fish="matMenu">
+    <button mat-menu-item>Baikal oilfish</button>
+    <button mat-menu-item>Bala shark</button>
+    <button mat-menu-item>Ballan wrasse</button>
+    <button mat-menu-item>Bamboo shark</button>
+    <button mat-menu-item>Banded killifish</button>
+</mat-menu>
+
+<mat-menu #amphibians="matMenu">
+    <button mat-menu-item>Sonoran desert toad</button>
+    <button mat-menu-item>Western toad</button>
+    <button mat-menu-item>Arroyo toad</button>
+    <button mat-menu-item>Yosemite toad</button>
+</mat-menu>
+
+<mat-menu #reptiles="matMenu">
+    <button mat-menu-item>Banded Day Gecko</button>
+    <button mat-menu-item>Banded Gila Monster</button>
+    <button mat-menu-item>Black Tree Monitor</button>
+    <button mat-menu-item>Blue Spiny Lizard</button>
+    <button mat-menu-item disabled>Velociraptor</button>
+</mat-menu>
+
+
+
+
+
+
+    <!-- -->
+<table mat-table [dataSource]="siteDataSource" matSort>
 
     <ng-container matColumnDef="select">
         <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Select</th>
         <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let row">
-        <mat-checkbox 
-        (click)="$event.stopPropagation()" 
-        (change)="$event ? siteSelection.toggle(row) : null"
-        [checked]= row.selected  >
-        </mat-checkbox>
+            <mat-checkbox (change)="onCheckboxChange(row)" [checked]= row.selected> </mat-checkbox>
         </td>
     </ng-container>
 
     <ng-container matColumnDef="Site">
-    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Site Name</th>
+    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef mat-sort-header>Site Name</th>
     <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let element">{{element.Site}}</td>
     </ng-container>
 
     <ng-container matColumnDef="Customer">
-    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef>Customer</th>
+    <th style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
     <td style="background-color: var(--overview-table-color); color: var( --form-text-color);" mat-cell *matCellDef="let element">{{element.Customer}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displaySiteName; sticky: true"></tr>
     <tr mat-row (click)="clickedRows.add(row)" *matRowDef="let row; columns:displaySiteName;"></tr>
-    </table>
+</table>
+<mat-paginator style="background-color: var(--overview-table-color); color: var( --form-text-color);" [pageSizeOptions]="[8]" showFirstLastButtons></mat-paginator>
     </div>
-</div>
+    </div>

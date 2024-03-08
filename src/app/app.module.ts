@@ -67,6 +67,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -137,7 +139,9 @@ import {MatSelectModule} from '@angular/material/select';
     MatCheckboxModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    AutocompleteLibModule,
+MatPaginatorModule,
   ],
   providers: [UserAuthenticationService, HeirarchyEditor,CommunicationService, RouteGuard, SiteStorageService,{provide: HTTP_INTERCEPTORS,useClass: HeaderInterceptor, multi:true},provideEcharts()],
   bootstrap: [AppComponent]
