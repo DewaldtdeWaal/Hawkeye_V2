@@ -10,6 +10,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { Observable, startWith,map, of } from 'rxjs';
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatPaginator } from '@angular/material/paginator';
+import { SiteStorageService } from 'src/app/site-storage.service';
 interface siteElement {
   Site: string;
   Customer: string;
@@ -20,6 +21,12 @@ interface siteElement {
 interface option{
   name: any;
   id:number
+}
+
+interface heirarchicalDropDown{
+  siteName: string;
+  children ?: heirarchicalDropDown[];
+  siteValue ?: string;
 }
 
 @Component({
@@ -33,6 +40,8 @@ export class PageAssignerComponent implements AfterContentInit {
 
   @Input() customers: any = [];
   @Input() pages: any = null;
+
+  //heir
   heir: any = {};
   displayheir: any = {};
   pageassignments:any = null
@@ -73,7 +82,7 @@ trackFn(index, item) {
 }
 
 
-  constructor(private heirarchyeditor: HeirarchyEditor, private http: HttpClient, private userauth: UserAuthenticationService, private commservice: CommunicationService ) {
+  constructor(private heirarchyeditor: HeirarchyEditor, private http: HttpClient, private userauth: UserAuthenticationService, private commservice: CommunicationService,private siteStorage:SiteStorageService ) {
   }
 
 
@@ -83,7 +92,10 @@ trackFn(index, item) {
 
     this.SetStructure();
 
-    this.displayheir = this.heir;
+    
+    
+
+  
   }
 
 
@@ -106,15 +118,24 @@ trackFn(index, item) {
     
 
 
-  
+  dropDownPage: any;
+
+  pageheirarchy: any;
+    userdata:any = {}
 
    GetUserData()
-  {
+   {
+     
+     this.userdata = this.siteStorage.getStructure()
+    
+     
     const message = { requesttype: "get page assignments", customers: this.customers };
     this.http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
     {
 
       this.pageassignments = res
+
+     
 
       for (let i = 0; i < this.pageassignments.length; i++) {
         this.options[i] = {
@@ -125,9 +146,72 @@ trackFn(index, item) {
       this.sortEmail();
     })
      
+     const secondMessage = { requesttype: "user data", user: this.userauth.email }
      
+     this.http.post<any>(this.commservice.postHostName, secondMessage).subscribe((res) => {
+         
+       this.dropDownPage = res
+
+       this.pageheirarchy = this.heirarchyeditor.GetStructure(this.dropDownPage.userdata.pages);
+       
+      // console.log(this.dropDownPage.userdata.pages)
+      let groupBy = this.groupByCustomer(this.dropDownPage.userdata.pages)
+
+       const groupedByHierarchy = this.loopThroug(groupBy);
+       
+       console.log(groupedByHierarchy)
+    
+     })
+    
   }
 
+
+  loopThroug(data: any) {
+    for (let property in data) {
+      data[property] = this.groupByHierarchy(Object.values(data[property]))
+    }
+    return data  
+  }
+
+ groupByHierarchy(data: any[]): Record<string, any[]> {
+    const groupBy = (array: any[], prop: string): Record<string, any[]> => {
+        return array.reduce((groups: Record<string, any>, item: any) => {
+            let currentGroup = groups;
+            const keys = item[prop];
+            keys.forEach((key: string) => {
+                currentGroup[key] = currentGroup[key] || {};
+                currentGroup = currentGroup[key];
+            });
+            (currentGroup['items'] = currentGroup['items'] || []).push(item);
+            return groups;
+        }, {});
+    };
+    return groupBy(data, 'pageheirarchy');
+}
+
+
+
+
+  
+  
+
+
+
+
+ groupByCustomer(array) {
+  return array.reduce((groups, item) => {
+    const customer = item.customer;
+    if (!groups[customer]) {
+      groups[customer] = [];
+    }
+    groups[customer].push(item);
+    return groups;
+  }, {});
+}
+
+
+  
+ 
   onAddAllCheckboxChange(row:siteElement){
     
   }
@@ -139,8 +223,7 @@ trackFn(index, item) {
   dropDownValue: any;
   displayTableBasedOnDropDown($event: any) {
 
-    console.log(this.pageassignments)
-   
+
 
 
     this.dropDownValue = $event;
@@ -148,7 +231,6 @@ trackFn(index, item) {
   }
 
 addOrRemoveSite(row: any) {
-  console.log(row);
   let addOrNot = false;
   for (let i = 0; i < this.pageassignments.length; i++) {
     if (this.pageassignments[i].email == this.currentEmailSelected) {
@@ -157,10 +239,8 @@ addOrRemoveSite(row: any) {
       if (myArray) {
         for (let j = 0; j < myArray.length; j++) {
           if (row == myArray[j]) {
-            console.log(myArray);
             addOrNot = true;
             myArray.splice(j, 1);
-            console.log(myArray);
             break; 
           }
         }
@@ -276,63 +356,7 @@ this.SITE_DATA.sort((a, b) => {
 }
   }
   
-  
-  SetStructure()
-  {
-    this.heir = this.heirarchyeditor.GetStructure(this.pages);
-  }
- 
-
-  HeirarchyValueChanged()
-  {
-    if(this.currentuser != "")
-    {
-      this.disableuserchange = true;
-      this.saveable = false;
-    }
-  }
-
-applyFilter(event: Event) {
-  this.filterValue = (event.target as HTMLInputElement).value;
- this.dataSource.filter = this.filterValue.trim().toLowerCase();
-  }
-  
-
-applyFilter2(event: Event) {
-  this.filterValue = (event.target as HTMLInputElement).value;
- this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
-  }
-
-
-
-
-      selectEvent(item) {
-        this.renderTable();
-
-        this.currentEmailSelected = item.name;
-
-
-        this.changeSelectedValue(null);
-
-  this.siteDataSource.data = [];
-  this.siteDataSource.sort = this.sort;
-        this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
-        this.siteDataSource.paginator = this.paginator;
-  }
-
-  onChangeSearch(search: string) {
-
-  }
-
-  onFocused(e) {
-  }
-
-
-
-
-
-
-   menuItems$ = of([
+     menuItems$ = ([
     {
       title: 'Test',
       children: [
@@ -373,7 +397,60 @@ applyFilter2(event: Event) {
         },
       ],
     },
-    { title: 'A', route: '/a' },
-    { title: 'B', route: '/b' },
   ]);
+  
+  SetStructure()
+  {
+    this.heir = this.heirarchyeditor.GetStructure(this.pages);
+
+
+
+   
+  }
+ 
+
+  HeirarchyValueChanged()
+  {
+    if(this.currentuser != "")
+    {
+      this.disableuserchange = true;
+      this.saveable = false;
+    }
+  }
+
+applyFilter(event: Event) {
+  this.filterValue = (event.target as HTMLInputElement).value;
+ this.dataSource.filter = this.filterValue.trim().toLowerCase();
+  }
+  
+
+applyFilter2(event: Event) {
+  this.filterValue = (event.target as HTMLInputElement).value;
+ this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+  }
+
+
+
+
+      selectEvent(item) {
+        this.renderTable();
+
+        this.currentEmailSelected = item.name;
+
+
+        this.changeSelectedValue(null);
+
+        this.siteDataSource.data = [];
+        this.siteDataSource.sort = this.sort;
+        this.siteDataSource.filter = this.filterValue.trim().toLowerCase();
+        this.siteDataSource.paginator = this.paginator;
+  }
+
+  onChangeSearch(search: string) {
+
+  }
+
+  onFocused(e) {
+  }
+
 }

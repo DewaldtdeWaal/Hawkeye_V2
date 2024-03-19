@@ -50,6 +50,7 @@ export class HeaderComponent {
 
     //
     this.userdata = this.siteStorage.getStructure()
+
     if(this.userdata)
     {
       this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages)
@@ -115,6 +116,7 @@ export class HeaderComponent {
       this.UpdateLinks()
       this.GetPageVariables(http)
       this.pageheirarchy = this.heirarchyservice.GetStructure(this.userdata.pages);
+
     })
   }
 
@@ -155,6 +157,9 @@ export class HeaderComponent {
     http.post<any>(this.commservice.postHostName,message).subscribe((res) => 
     {
       this.variableData = res
+
+ 
+
       if(this.variableData != null && this.sitestructure != null)
         this.SetSiteStructureVariables(this.sitestructure,this.variableData)
 
