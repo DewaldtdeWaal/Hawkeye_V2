@@ -119,7 +119,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
     {
         for(var item of this.structure.components[0].trendinformation)
         {
-          for(var respitem in res)//var respitem of res)
+          for(var respitem in res)
           {
             if(item.sitename == respitem)
             {
@@ -193,7 +193,7 @@ export class ChartComponent implements OnChanges,AfterContentInit {
    yAxis: [
         {
        type: 'value',
-      nameTextStyle: { color: 'red' }
+      axisLabel: { color: 'white' }
         }
     ],
     series: 
